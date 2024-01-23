@@ -2,8 +2,13 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import auth from './routes/user'
+import mongoose from 'mongoose'
+import 'dotenv/config'
 
 const app = new Hono()
+console.log(process.env.DATABASE_URL!!)
+mongoose.connect(process.env.DATABASE_URL!!);
+
 
 app.use(
     '/api/*',
