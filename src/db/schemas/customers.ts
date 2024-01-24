@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { Reservation } from '../../models/reservation'
 import { Bill } from '../../models/bill'
 const { Schema } = mongoose
-export const userSchema = new Schema({
+export const customersSchema = new Schema({
     name: String,
     email: String,
     phone: String,

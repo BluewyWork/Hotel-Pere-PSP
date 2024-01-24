@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
-export const userSchema = new Schema({
+export const billSchema = new Schema({
     customerId: String,
     totalAmount: Number,
     items: Array<Map<String, number>>,
