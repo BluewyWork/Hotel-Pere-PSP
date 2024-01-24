@@ -4,6 +4,6 @@ export interface Employee {
     contact: String
 }
 
-enum EmployeeRole {
+export enum EmployeeRole {
     Admin, Normal
 }
