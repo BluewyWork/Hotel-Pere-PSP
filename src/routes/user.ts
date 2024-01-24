@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { Answer } from '../models/answer'
 import { saveUser } from '../controllers/auth/register'
 import { login } from '../controllers/auth/login'
-import {userSchema} from '../db/schemas/user'
+
 
 const app = new Hono()
 
