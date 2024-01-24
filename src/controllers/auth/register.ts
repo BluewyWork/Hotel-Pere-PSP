@@ -2,6 +2,10 @@ import { Answer } from '../../models/answer'
 import { User } from '../../models/user'
 import { hashPassword } from '../../utils/auth'
 import { ValidateUserRegister } from '../../validators/auth'
+import mongoose,{Document} from 'mongoose'
+import { userSchema } from '../../db/schemas/user'
+
+const UserModel = mongoose.model<User>('Users', userSchema);
 
 export const saveUser = async (c: any): Promise<Answer> => {
     const user = (await c.req.json()) as User
@@ -20,6 +24,9 @@ export const saveUser = async (c: any): Promise<Answer> => {
         validateUser.data.password = await hashPassword(
             validateUser.data.password
         )
+       
+
+        await UserModel.create(user)
 
         return {
             data: 'Usuario creado correctamente',
