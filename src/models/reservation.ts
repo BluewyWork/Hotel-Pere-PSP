@@ -6,6 +6,6 @@ export interface Reservation {
     status: Status
 }
 
-enum Status {
+export enum Status {
     Confirmed, Pending, Cancelled
 }
