@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { Bed } from '../../models/bed'
 const { Schema } = mongoose
-export const userSchema = new Schema({
+export const roomSchema = new Schema({
     number: Number,
     section: String,
     pricePerNight: Number,

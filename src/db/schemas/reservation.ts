@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { Status } from '../../models/reservation'
 const { Schema } = mongoose
-export const userSchema = new Schema({
+export const reservationSchema = new Schema({
     customerId: String,
     roomId: String,
     checkIn: Date,
