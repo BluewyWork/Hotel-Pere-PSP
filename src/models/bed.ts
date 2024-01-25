@@ -4,9 +4,14 @@ export interface Bed {
 }
 
 export enum BedSize {
-    Individual, Double, Auxiliar, Complementary
+    Individual='individual',
+    Double='double' ,
+    Auxiliar= 'auxiliar',
+    Complementary= 'complementary'
 }
 
 export enum BedType {
-    Leather, Cotton, Bamboo
+    Leather = 'leather',
+    Cotton = 'cotton',
+    Bamboo = 'bamboo'
 }
