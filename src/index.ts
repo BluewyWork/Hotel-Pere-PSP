@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import auth from './routes/user'
 import room from './routes/room'
+import customer from './routes/customer'
 import mongoose from 'mongoose'
 import 'dotenv/config'
 
@@ -20,7 +21,8 @@ app.use(
 )
 
 app.route('/api/', auth)
-app.route('/api/room/', room)
+// app.route('/api/room/', room)
+app.route('api/customers', customer)
 
 const port = 8000
 console.log(`Server is running on port ${port}`)
