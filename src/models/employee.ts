@@ -5,5 +5,6 @@ export interface Employee {
 }
 
 export enum EmployeeRole {
-    Admin, Normal
+    Admin,
+    Normal,
 }
