@@ -1,9 +1,7 @@
 export interface Employee {
     name: String
-    role: EmployeeRole
-    contact: String
+    role: Boolean
+    password: String
+    email: String
 }
 
-export enum EmployeeRole {
-    Admin, Normal
-}

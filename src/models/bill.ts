@@ -1,5 +1,6 @@
 export interface Bill {
-    customerId: String
+    customerName: String
+    customerEmail: String
     totalAmount: number
     items: Array<Map<String, number>>
 }
