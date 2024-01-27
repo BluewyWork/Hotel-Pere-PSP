@@ -1,5 +1,5 @@
-import { Bill } from "./bill";
-import { Reservation } from "./reservation";
+import { Bill } from './bill'
+import { Reservation } from './reservation'
 
 export interface Customer {
     name: String

@@ -1,4 +1,4 @@
-import { Bed } from "./bed";
+import { Bed } from './bed'
 
 export interface Room {
     number: number
