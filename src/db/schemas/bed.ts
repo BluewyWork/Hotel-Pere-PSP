@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import { BedType } from '../../models/bedType'
-import { BedSize } from '../../models/bedSize'
+import { BedSize, BedType } from '../../models/bed'
 const { Schema } = mongoose
-export const userSchema = new Schema({
+
+export const bedSchema = new Schema({
     bedType: BedType,
     bedSize: BedSize,
-    created_at: { type: Date, default: Date.now }
+    created_at: { type: Date, default: Date.now },
 })

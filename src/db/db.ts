@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+/*import mongoose from 'mongoose'
 
 export const connectDb = (callback: Function) => {
     mongoose.connect(
@@ -10,4 +10,4 @@ export const connectDb = (callback: Function) => {
     mongoose.connection.close()
 
     return result
-}
+}*/

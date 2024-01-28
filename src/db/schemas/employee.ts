@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { EmployeeRole } from '../../models/employee'
 const { Schema } = mongoose
-export const userSchema = new Schema({
+export const employeeSchema = new Schema({
     name: String,
     role: EmployeeRole,
     contact: String,

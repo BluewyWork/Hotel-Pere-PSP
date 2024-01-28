@@ -1,12 +1,13 @@
 export interface Reservation {
-    customerId: String
-    roomId: String
+    customerName: String
+    customerEmail: String
+    roomNumber: Number
+    roomPrice: Number
     checkIn: Date
     checkOut: Date
     status: Status
 }
 
-
 export enum Status {
-    Confirmed, Pending, Cancelled
+    confirmed, pending, cancelled
 }
