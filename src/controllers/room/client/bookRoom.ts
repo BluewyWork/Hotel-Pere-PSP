@@ -6,6 +6,7 @@ import { Customer } from '../../../models/customer'
 import { Reservation, Status } from '../../../models/reservation'
 import { customerSchema } from '../../../db/schemas/customer'
 import { reservationSchema } from '../../../db/schemas/reservation'
+import { BookDates } from '../../../models/BookDates'
 
 const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 const CustomerModel = mongoose.model<Customer>('rooms', customerSchema)
@@ -14,7 +15,7 @@ const ReservationModel = mongoose.model<Reservation>('rooms', reservationSchema)
 export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
     const payload = c.get('jwtPayload')
 
-    // const dates = c.
+    const bookDate = c.json as BookDates
 
     try {
         const room = await RoomModel.findOne({ number: roomNumber })
@@ -41,8 +42,8 @@ export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
             customerEmail: client.email,
             roomNumber: room?.number,
             roomPrice: room.pricePerNight,
-            checkIn: new Date(Date.now()),
-            checkOut: new Date(Date.now()),
+            checkIn: bookDate.checkIn,
+            checkOut: bookDate.checkOut,
             status: Status.Confirm,
         }
 
