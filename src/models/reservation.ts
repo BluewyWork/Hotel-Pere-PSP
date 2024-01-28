@@ -9,5 +9,7 @@ export interface Reservation {
 }
 
 export enum Status {
-    confirmed, pending, cancelled
+    Cancelled = 'cancelled',
+    Confirm = 'confirmed',
+    Pending = 'pending',
 }
