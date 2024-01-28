@@ -3,7 +3,6 @@ import { Answer } from '../models/answer'
 import { saveUser } from '../controllers/auth/register'
 import { login } from '../controllers/auth/login'
 
-
 const app = new Hono()
 
 app.post('/register', async (c) => {

@@ -8,7 +8,6 @@ export interface Reservation {
     status: Status
 }
 
-
 export enum Status {
     confirmed, pending, cancelled
 }

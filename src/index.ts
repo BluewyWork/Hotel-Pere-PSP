@@ -8,8 +8,7 @@ import 'dotenv/config'
 
 const app = new Hono()
 console.log(process.env.DATABASE_URL!!)
-mongoose.connect(process.env.DATABASE_URL!!);
-
+mongoose.connect(process.env.DATABASE_URL!!)
 
 app.use(
     '/api/*',
