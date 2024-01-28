@@ -18,7 +18,7 @@ app.get('/:number', async (c) => {
 })
 
 app.put('/:number', async (c) => {
-    const result = await bookRoom(parseInt(c.req.param('number')))
+    const result = await bookRoom(c, parseInt(c.req.param('number')))
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
