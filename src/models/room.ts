@@ -4,5 +4,5 @@ export interface Room {
     section: String
     pricePerNight: number
     reserved?: boolean
-    bed: number
+    beds: number
 }
