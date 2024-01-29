@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
-import { EmployeeRole } from '../../models/employee'
 const { Schema } = mongoose
+
 export const employeeSchema = new Schema({
     name: String,
-    role: EmployeeRole,
+    admin: Boolean,
     contact: String,
 
-    created_at: { type: Date, default: Date.now }
+    created_at: { type: Date, default: Date.now },
 })

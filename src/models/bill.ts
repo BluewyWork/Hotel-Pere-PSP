@@ -1,5 +1,6 @@
 export interface Bill {
-    customerId: String
+    customerEmail: String
     totalAmount: number
     items: Array<[String, number]>
+    createdAt: Date
 }

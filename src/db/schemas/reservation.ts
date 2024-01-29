@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { Status } from '../../models/reservation'
 const { Schema } = mongoose
 
 export const reservationSchema = new Schema({
@@ -7,6 +6,6 @@ export const reservationSchema = new Schema({
     roomId: String,
     checkIn: Date,
     checkOut: Date,
-    status: Status,
+    status: Boolean,
     created_at: { type: Date, default: Date.now },
 })

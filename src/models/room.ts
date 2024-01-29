@@ -1,9 +1,8 @@
-import { Bed } from './bed'
-
 export interface Room {
+    id: String
     number: number
     section: String
     pricePerNight: number
     reserved?: boolean
-    bed: Array<Bed>
+    bed: number
 }

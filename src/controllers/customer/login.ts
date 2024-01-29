@@ -20,7 +20,7 @@ export const customerLogin = async (c: any): Promise<Answer> => {
         }
     }
 
-    const queriedCustomer = CustomerModel.findOne({
+    const queriedCustomer = await CustomerModel.findOne({
         email: customer.email,
     }).exec()
 
@@ -32,7 +32,9 @@ export const customerLogin = async (c: any): Promise<Answer> => {
         }
     }
 
-    console.log(queriedCustomer)
+    console.log(queriedCustomer.password)
+
+    const verifyPassword = await verfifyPassword(queriedCustomer.password)
 
     return {
         data: '...',

@@ -3,11 +3,6 @@ export interface Reservation {
     roomId: String
     checkIn: Date
     checkOut: Date
-    status: Status
-}
-
-export enum Status {
-    Confirmed,
-    Pending,
-    Cancelled,
+    status: boolean
+    customerEmail: String
 }
