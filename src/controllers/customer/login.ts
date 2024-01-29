@@ -4,6 +4,8 @@ import { Customer } from '../../models/customer'
 import { ValidateCustomerLogin } from '../../validators/customer'
 import { customerSchema } from '../../db/schemas/customer'
 import { verfifyPassword } from '../../utils/auth'
+import { setCookie } from 'hono/cookie'
+import { sign } from 'hono/jwt'
 
 const CustomerModel = mongoose.model<Customer>('Customer', customerSchema)
 
@@ -26,19 +28,33 @@ export const customerLogin = async (c: any): Promise<Answer> => {
 
     if (!queriedCustomer) {
         return {
-            data: 'Invalid Credential',
+            data: 'Invalid Credentials',
             status: 401,
             ok: false,
         }
     }
 
-    console.log(queriedCustomer.password)
+    const verifyPassword = await verfifyPassword(
+        validateCustomer.data.password,
+        queriedCustomer.password.toString()
+    )
 
-    const verifyPassword = await verfifyPassword(queriedCustomer.password)
+    if (!verifyPassword) {
+        return {
+            data: 'UwU',
+            status: 422,
+            ok: false,
+        }
+    }
+
+    setCookie(c, 'jwt', await sign(queriedCustomer.email, 'test'), {
+        sameSite: 'Lax',
+        path: '/',
+    })
 
     return {
-        data: '...',
-        status: 400,
-        ok: false,
+        data: 'Inicio de session correcto',
+        status: 200,
+        ok: true,
     }
 }
