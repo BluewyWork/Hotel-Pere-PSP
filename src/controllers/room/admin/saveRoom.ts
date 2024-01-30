@@ -5,15 +5,16 @@ import { invalidContent } from '../../../utils/validators'
 import { ValidateRoom } from '../../../validators/room'
 import { roomSchema } from '../../../db/schemas/room'
 
-const RoomModel = mongoose.model<Room>('Users', roomSchema)
-
 export const saveRoom = async (c: any): Promise<Answer> => {
+    const RoomModel = mongoose.model<Room>('Users', roomSchema)
+
     const room = (await c.req.json()) as Room
 
     const validation = invalidContent(room, ValidateRoom)
     if (validation) {
         return validation
     }
+
     try {
         await RoomModel.create(room)
 

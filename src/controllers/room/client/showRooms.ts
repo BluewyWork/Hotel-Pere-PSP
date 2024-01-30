@@ -3,9 +3,9 @@ import { roomSchema } from '../../../db/schemas/room'
 import { Answer } from '../../../models/answer'
 import { Reserved, Room } from '../../../models/room'
 
-const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-
 export const showRooms = async (c: any): Promise<Answer> => {
+    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+
     try {
         const result = await RoomModel.find({ confirmed: Reserved.Cancelled })
 

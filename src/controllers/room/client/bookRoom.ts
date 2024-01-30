@@ -8,11 +8,14 @@ import { customerSchema } from '../../../db/schemas/customer'
 import { reservationSchema } from '../../../db/schemas/reservation'
 import { BookDates } from '../../../models/BookDates'
 
-const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-const CustomerModel = mongoose.model<Customer>('rooms', customerSchema)
-const ReservationModel = mongoose.model<Reservation>('rooms', reservationSchema)
-
 export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
+    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+    const CustomerModel = mongoose.model<Customer>('customer', customerSchema)
+    const ReservationModel = mongoose.model<Reservation>(
+        'reservation',
+        reservationSchema
+    )
+
     const payload = c.get('jwtPayload')
 
     const bookDate = c.json as BookDates

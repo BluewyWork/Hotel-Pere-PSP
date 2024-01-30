@@ -3,9 +3,9 @@ import { roomSchema } from '../../../db/schemas/room'
 import { Room } from '../../../models/room'
 import { Answer } from '../../../models/answer'
 
-const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-
 export const deleteRoom = async (number: Number): Promise<Answer> => {
+    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+
     try {
         const result = await RoomModel.deleteOne({ number: number })
 

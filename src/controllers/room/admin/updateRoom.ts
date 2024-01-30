@@ -3,9 +3,9 @@ import { Answer } from '../../../models/answer'
 import { Room } from '../../../models/room'
 import { roomSchema } from '../../../db/schemas/room'
 
-const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-
 export const updateRoom = async (c: any): Promise<Answer> => {
+    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+
     const room = (await c.req.json()) as Room
 
     try {

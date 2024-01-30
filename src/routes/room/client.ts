@@ -23,4 +23,10 @@ app.put('/:number', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
+app.put('/:number', async (c) => {
+    const result = await bookRoom(c, parseInt(c.req.param('number')))
+
+    return c.json({ data: result.data, ok: result.ok }, result.status)
+})
+
 export default app
