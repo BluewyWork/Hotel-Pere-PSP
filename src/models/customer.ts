@@ -6,4 +6,7 @@ export interface Customer {
     email: String
     password: String
     phone: String
+    password: String
+    reservations: Array<Reservation>
+    bills: Array<Bill>
 }

@@ -1,7 +1,12 @@
 import { z } from 'zod'
-export const ValidateCustomer = z.object({
+import { Customer } from '../models/customer'
+//import { ValidatorReservation } from './reservation'
+
+export const ValidateCustomerLogin = z.object({
     name: z.string(),
     email: z.string(),
+    phone: z.string(),
     password: z.string(),
-    phone: z.string()
+   // reservations: z.array(ValidatorReservation),
 })
+

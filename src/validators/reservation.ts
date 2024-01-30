@@ -1,14 +1,10 @@
-import {z} from 'zod'
-import { Status } from '../models/reservation'
+import { z } from 'zod'
 
-
-export const ValidateReservation =z.object({
-    customerName: z.string(),
-    customerEmail: z.string(),
-    roomNumber: z.number(),
-    roomPrice: z.number(),
+export const ValidatorReservation = z.object({
+    customerId: z.string(),
+    roomId: z.string(),
     checkIn: z.date(),
     checkOut: z.date(),
-    status: z.nativeEnum(Status)
+    status: z.boolean(),
 })
-   
+
