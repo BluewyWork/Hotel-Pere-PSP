@@ -1,8 +1,9 @@
 export interface Room {
     id: String
     number: number
-    section: String
+    section?: String
     pricePerNight: number
+    image?: String
     reserved?: boolean
     beds: number
 }

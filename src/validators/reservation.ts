@@ -7,3 +7,4 @@ export const ValidatorReservation = z.object({
     checkOut: z.date(),
     status: z.boolean(),
 })
+

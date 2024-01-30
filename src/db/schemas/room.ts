@@ -6,5 +6,8 @@ export const roomSchema = new Schema({
     section: String,
     pricePerNight: Number,
     bed: Number,
+    reserved: Boolean,
+    image: String,
+    bed: Number,
     created_at: { type: Date, default: Date.now },
 })
