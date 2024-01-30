@@ -1,8 +1,9 @@
 import { z } from 'zod'
 export const ValidationEmployee = z.object({
     name: z.string(),
-    role: z.boolean(),
+    admin: z.boolean(),
+    email: z.string(),
     password: z.string(),
-    email: z.string()
-});
-    
+    password_confirm: z.string().optional(),
+    created_at: z.date().optional(),
+})

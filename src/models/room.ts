@@ -1,16 +1,10 @@
-import { Bed } from './bed'
-
 export interface Room {
+    _id?: string
     number: number
-    section?: String
+    section: string
     pricePerNight: number
-    reserved: Reserved
-    image?: String
-    bed: Array<Bed>
-}
-
-export enum Reserved{
-    Cancelled = 'cancelled',
-    Confirm = 'confirmed',
-    Pending = 'pending'
+    beds: number
+    image: string
+    reserved?: boolean
+    created_at?: Date
 }
