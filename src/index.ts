@@ -2,8 +2,11 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import auth from './routes/user'
-import room from './routes/room'
+
+import admin from './routes/room/admin'
+import client from './routes/room/client'
 import customer from './routes/customer'
+
 import mongoose from 'mongoose'
 import 'dotenv/config'
 
@@ -14,14 +17,15 @@ mongoose.connect(process.env.DATABASE_URL!!)
 app.use(
     '/api/*',
     cors({
-        origin: 'http://localhost:3000',
+        origin: '*',
         allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE'],
         credentials: true,
     })
 )
 
 app.route('/api/', auth)
-// app.route('/api/room/', room)
+app.route('/api/admin/room/', admin)
+app.route('api/client/room', client)
 app.route('api/customers', customer)
 
 const port = 8000

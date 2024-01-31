@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { Answer } from '../models/answer'
-import { saveUser } from '../controllers/auth/register'
-import { login } from '../controllers/auth/login'
+import { saveUser } from '../controllers/auth/client/register'
+import { login } from '../controllers/auth/employee/login'
 
 const app = new Hono()
 

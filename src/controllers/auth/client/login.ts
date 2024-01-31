@@ -1,18 +1,18 @@
 import mongoose from 'mongoose'
-import { Answer } from '../../models/answer'
-import { Customer } from '../../models/customer'
-import { ValidateCustomerLogin } from '../../validators/customer'
-import { customerSchema } from '../../db/schemas/customer'
-import { verfifyPassword } from '../../utils/auth'
+import { Answer } from '../../../models/answer'
+import { customerSchema } from '../../../db/schemas/customer'
+import { verfifyPassword } from '../../../utils/auth'
 import { setCookie } from 'hono/cookie'
 import { sign } from 'hono/jwt'
-
-const CustomerModel = mongoose.model<Customer>('Customer', customerSchema)
+import { ValidateUserLogin } from '../../../validators/auth'
+import { User } from '../../../models/user'
 
 export const customerLogin = async (c: any): Promise<Answer> => {
-    const customer = (await c.req.json()) as Customer
+    const CustomerModel = mongoose.model<User>('Customer', customerSchema)
 
-    const validateCustomer = ValidateCustomerLogin.safeParse(customer)
+    const customer = (await c.req.json()) as User
+
+    const validateCustomer = ValidateUserLogin.safeParse(customer)
 
     if (!validateCustomer.success) {
         return {

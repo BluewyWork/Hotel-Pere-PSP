@@ -5,5 +5,4 @@ export interface Reservation {
     checkIn: Date
     checkOut: Date
     status: boolean
-    customerEmail: String
 }

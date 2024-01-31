@@ -1,9 +1,10 @@
 export interface Room {
-    id: String
+    _id?: string
     number: number
-    section?: String
+    section: string
     pricePerNight: number
-    image?: String
-    reserved?: boolean
     beds: number
+    image: string
+    reserved?: boolean
+    created_at?: Date
 }
