@@ -14,7 +14,7 @@ export const updateRoom = async (c: any): Promise<Answer> => {
             reserved: room.reserved,
             image: room.image,
             section: room.section,
-            bed: room.bed,
+            beds: room.beds,
             pricePerNight: room.pricePerNight,
         })
 

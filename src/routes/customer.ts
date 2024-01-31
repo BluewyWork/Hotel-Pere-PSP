@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { customerLogin } from '../controllers/customer/login'
+import { customerLogin } from '../controllers/auth/client/login'
 
 const app = new Hono()
 

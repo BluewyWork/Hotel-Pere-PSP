@@ -1,16 +1,16 @@
 import mongoose from 'mongoose'
 import { Answer } from '../../../models/answer'
 import { roomSchema } from '../../../db/schemas/room'
-import { Reserved, Room } from '../../../models/room'
-import { Customer } from '../../../models/customer'
-import { Reservation, Status } from '../../../models/reservation'
+import { Room } from '../../../models/room'
+import { Reservation } from '../../../models/reservation'
 import { customerSchema } from '../../../db/schemas/customer'
 import { reservationSchema } from '../../../db/schemas/reservation'
 import { BookDates } from '../../../models/BookDates'
+import { User } from '../../../models/user'
 
 export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const CustomerModel = mongoose.model<Customer>('customer', customerSchema)
+    const CustomerModel = mongoose.model<User>('customer', customerSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
@@ -41,19 +41,18 @@ export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
         }
 
         const booking: Reservation = {
-            customerName: client.name,
-            customerEmail: client.email,
+            customerId: client.id,
             roomNumber: room?.number,
             roomPrice: room.pricePerNight,
             checkIn: bookDate.checkIn,
             checkOut: bookDate.checkOut,
-            status: Status.Confirm,
+            status: true,
         }
 
         ReservationModel.create(booking)
         RoomModel.updateOne(
             { number: roomNumber },
-            { $set: { reserved: Reserved.Confirm } }
+            { $set: { reserved: true } }
         )
 
         return {
