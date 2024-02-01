@@ -3,7 +3,7 @@ import { Answer } from '../models/answer'
 
 export const invalidContent = (
     el: any,
-    validator: ZodObject<any>
+    validator: ZodObject<any | unknown>
 ): Answer | null => {
     const validation = validator.safeParse(el)
 

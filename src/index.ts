@@ -10,6 +10,9 @@ import employee from './routes/employee'
 
 import mongoose from 'mongoose'
 import 'dotenv/config'
+import { jwt } from 'hono/jwt'
+
+import userRoutes from './routes/client/index'
 
 const app = new Hono()
 console.log(process.env.DATABASE_URL!!)
@@ -24,11 +27,22 @@ app.use(
     })
 )
 
-app.route('/api/', auth)
-app.route('/api/admin/room/', admin)
-app.route('api/client/room', client)
-app.route('api/customers', customer)
-app.route('api/employee/', employee)
+app.use(
+    '/api/*',
+    jwt({
+        secret: process.env.JWT_SECRET!!,
+    })
+)
+
+// hacer middleware de empleado
+
+app.route('/auth', auth)
+app.route('/api/admin/room', admin)
+app.route('/api/client/room', client)
+app.route('/api/customers', customer)
+app.route('/api/employee', employee)
+
+app.route('/api/user', userRoutes)
 
 const port = 8000
 console.log(`Server is running on port ${port}`)

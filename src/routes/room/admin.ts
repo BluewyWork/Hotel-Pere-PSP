@@ -38,12 +38,4 @@ app.get('/', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-// app.get('/getAllConfirmed/:confirmed', async (c) => {
-//     const result = await getAllConfirmed(c.req.param('confirmed'))
-//     return c.json({ data: result.data, ok: result.ok }, result.status)
-// })
-// app.get('/getAllCancelled/:cancelled', async (c) => {
-//     const result = await getAllConfirmed(c.req.param('cancelled'))
-//     return c.json({ data: result.data, ok: result.ok }, result.status)
-// })
 export default app
