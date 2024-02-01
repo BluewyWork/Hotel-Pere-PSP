@@ -6,11 +6,12 @@ import { setCookie } from 'hono/cookie'
 import { sign } from 'hono/jwt'
 import { ValidateUserLogin } from '../../../validators/auth'
 import { User } from '../../../models/user'
+import { Employee } from '../../../models/employee'
 
 export const customerLogin = async (c: any): Promise<Answer> => {
     const CustomerModel = mongoose.model<User>('Customer', customerSchema)
 
-    const customer = (await c.req.json()) as User
+    const customer = (await c.req.json()) as Employee
 
     const validateCustomer = ValidateUserLogin.safeParse(customer)
 

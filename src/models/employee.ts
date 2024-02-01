@@ -1,6 +1,6 @@
 export interface Employee {
-    name: String
+    name: string
     admin: boolean
-    email: String
-    password: String
+    email: string
+    password: string
 }
