@@ -6,7 +6,7 @@ import { ValidateRoom } from '../../../validators/room'
 import { roomSchema } from '../../../db/schemas/room'
 
 export const saveRoom = async (c: any): Promise<Answer> => {
-    const RoomModel = mongoose.model<Room>('Users', roomSchema)
+    const RoomModel = mongoose.model<Room>('Rooms', roomSchema)
 
     const room = (await c.req.json()) as Room
 
