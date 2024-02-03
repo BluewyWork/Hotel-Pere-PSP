@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
 import { Answer } from '../models/answer'
-import { saveUser } from '../controllers/auth/client/register'
 import { login } from '../controllers/auth/employee/login'
 import { saveEmployee } from '../controllers/auth/employee/register'
 

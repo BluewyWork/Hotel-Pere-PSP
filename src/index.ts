@@ -31,6 +31,7 @@ app.use(
     '/api/*',
     jwt({
         secret: process.env.JWT_SECRET!!,
+        cookie: 'jwt',
     })
 )
 
