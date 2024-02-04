@@ -1,12 +1,12 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import auth from './routes/employee'
+import authEmployee from './routes/employee'
 
-import admin from './routes/room/admin'
+import roomsAdmin from './routes/room/admin'
 import client from './routes/room/client'
-import customer from './routes/customer'
-import employee from './routes/employee'
+import authCustomer from './routes/customer'
+import adminBooks from './routes/books/employee'
 
 import mongoose from 'mongoose'
 import 'dotenv/config'
@@ -37,11 +37,11 @@ app.use(
 
 // hacer middleware de empleado
 
-app.route('/auth/employee', auth)
-app.route('/auth/client', client)
-app.route('/api/admin/room', admin)
-app.route('/api/customers', customer)
-app.route('/api/employee', employee)
+app.route('/auth/employee', authEmployee)
+app.route('/auth/client', authCustomer)
+app.route('/api/admin/room', roomsAdmin)
+app.route('/api/admin/books', adminBooks)
+app.route('/api/clients', client)
 
 app.route('/api/user', userRoutes)
 

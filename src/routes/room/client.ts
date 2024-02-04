@@ -12,7 +12,7 @@ app.get('/', async (c) => {
 })
 
 app.get('/:number', async (c) => {
-    const result = await showRoom(parseInt(c.req.param('number')))
+    const result = await showRoom(c, parseInt(c.req.param('number')))
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
