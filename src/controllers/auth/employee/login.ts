@@ -9,7 +9,7 @@ import { Employee } from '../../../models/employee'
 import { employeeSchema } from '../../../db/schemas/employee'
 
 export const login = async (c: any): Promise<Answer> => {
-    const EmployeeModel = mongoose.model<Employee>('Employee', employeeSchema)   
+    const EmployeeModel = mongoose.model<Employee>('Employee', employeeSchema)
 
     const invalidCredentials: Answer = {
         data: 'Invalid Credentials',
@@ -17,11 +17,10 @@ export const login = async (c: any): Promise<Answer> => {
         ok: false,
     }
     const employee = (await c.req.json()) as User
-   
+
     const valdiateEmployee = ValidateUserLogin.safeParse(employee)
-    
-   
-    if (!valdiateEmployee.success) {      
+
+    if (!valdiateEmployee.success) {
         return {
             data: valdiateEmployee.error.message,
             status: 422,
@@ -35,7 +34,6 @@ export const login = async (c: any): Promise<Answer> => {
         }).exec()
 
         if (!queriedEmployee) {
-            
             return invalidCredentials
         }
 
@@ -47,10 +45,15 @@ export const login = async (c: any): Promise<Answer> => {
             return invalidCredentials
         }
 
-        setCookie(c, 'jwt', await sign(queriedEmployee.email, 'test'), {
-            sameSite: 'Lax',
-            path: '/',
-        })
+        setCookie(
+            c,
+            'jwt',
+            await sign(queriedEmployee.email, process.env.JWT_SECRET!!),
+            {
+                sameSite: 'Lax',
+                path: '/',
+            }
+        )
 
         return {
             data: 'Inicio de sesion correcto',
