@@ -37,16 +37,16 @@ app.use(
 
 // hacer middleware de empleado
 
-app.route('/auth', auth)
+app.route('/auth/employee', auth)
+app.route('/auth/client', client)
 app.route('/api/admin/room', admin)
-app.route('/api/client/room', client)
 app.route('/api/customers', customer)
 app.route('/api/employee', employee)
 
 app.route('/api/user', userRoutes)
 
 const port = 8000
-console.log(`Server is running on port ${port}`)
+console.log(`Server is runn-ing on port ${port}`)
 
 serve({
     fetch: app.fetch,
