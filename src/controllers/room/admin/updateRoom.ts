@@ -4,21 +4,21 @@ import { Room } from '../../../models/room'
 import { roomSchema } from '../../../db/schemas/room'
 
 export const updateRoom = async (c: any): Promise<Answer> => {
-    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+    const RoomModel = mongoose.model<Room>('Rooms', roomSchema)
 
     const room = (await c.req.json()) as Room
 
     try {
         const result = await RoomModel.updateOne({
             number: room.number,
+            section: room.section,
+            pricePerNight: room.pricePerNight,
             reserved: room.reserved,
             image: room.image,
-            section: room.section,
-            beds: room.beds,
-            pricePerNight: room.pricePerNight,
+            beds: room.beds,          
         })
 
-        if (result.upsertedCount === 1) {
+        if (result.upsertedCount = 1) {
             return {
                 data: 'Habitación actualizada correctamente',
                 status: 200, // Cambiado a 204 No Content
