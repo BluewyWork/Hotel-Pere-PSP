@@ -5,7 +5,7 @@ export const ValidateRoom = z.object({
     _id: idMongo,
     number: z.number(),
     section: z.string().min(1, { message: 'Secion invalida' }).trim(),
-    pricePerNigtht: z.number().gt(0, 'Precio invalido'),
+    pricePerNight: z.number().gt(0, 'Precio invalido'),
     beds: z.number(),
     image: z.string(),
     reserved: z.boolean(),
