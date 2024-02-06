@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { showClient } from '../../controllers/room/client/showClient'
+import { showClient } from '../../controllers/customer/customer/showCustomer'
 
 const app = new Hono()
 
