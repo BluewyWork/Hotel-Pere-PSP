@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import { userSchema } from '../../../db/schemas/user'
 
 export const saveUser = async (c: any): Promise<Answer> => {
-    const UserModel = mongoose.model<User>('Employee', userSchema)
+    const UserModel = mongoose.model<User>('customers', userSchema)
 
     const user = (await c.req.json()) as User
 
@@ -24,8 +24,7 @@ export const saveUser = async (c: any): Promise<Answer> => {
         validateUser.data.password = await hashPassword(
             validateUser.data.password
         )
-            
-            
+
         await UserModel.create(validateUser.data)
 
         return {
