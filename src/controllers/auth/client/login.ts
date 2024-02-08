@@ -48,18 +48,18 @@ export const customerLogin = async (c: any): Promise<Answer> => {
         }
     }
 
-    setCookie(
-        c,
-        'jwt',
-        await sign(queriedCustomer.email, process.env.JWT_SECRET!!),
-        {
-            sameSite: 'Lax',
-            path: '/',
-        }
-    )
+    const token = await sign(queriedCustomer.email, process.env.JWT_SECRET!!)
+
+    // setCookie(
+    //     c,
+    //     'jwt',
+    //     token,
+    // )
 
     return {
-        data: 'Inicio de session correcto',
+        data: {
+            token,
+        },
         status: 200,
         ok: true,
     }
