@@ -5,6 +5,6 @@ export interface Room {
     pricePerNight: number
     beds: number
     image: string
-    reserved?: boolean
+    reserved: boolean
     created_at?: Date
 }
