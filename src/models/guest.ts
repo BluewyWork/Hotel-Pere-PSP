@@ -1,4 +1,4 @@
-export interface User {
+export interface Guest {
     _id?: { $oid: string }
     name?: string
     email: string

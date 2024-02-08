@@ -1,33 +1,33 @@
 import mongoose from 'mongoose'
 import { Answer } from '../../../models/answer'
-import { customerSchema } from '../../../db/schemas/customer'
+import { guestSchema } from '../../../db/schemas/guest'
 import { verfifyPassword } from '../../../utils/auth'
 import { setCookie } from 'hono/cookie'
 import { sign } from 'hono/jwt'
-import { ValidateUserLogin } from '../../../validators/auth'
-import { User } from '../../../models/user'
+import { ValidateGuestLogin } from '../../../validators/auth'
+import { Guest as Guest } from '../../../models/guest'
 import { Employee } from '../../../models/employee'
 
-export const customerLogin = async (c: any): Promise<Answer> => {
-    const CustomerModel = mongoose.model<User>('customers', customerSchema)
+export const guestLogin = async (c: any): Promise<Answer> => {
+    const GuestModel = mongoose.model<Guest>('customers', guestSchema)
 
-    const customer = (await c.req.json()) as User
+    const guest = (await c.req.json()) as Guest
 
-    const validateCustomer = ValidateUserLogin.safeParse(customer)
+    const validateGuest = ValidateGuestLogin.safeParse(guest)
 
-    if (!validateCustomer.success) {
+    if (!validateGuest.success) {
         return {
-            data: validateCustomer.error.message,
+            data: validateGuest.error.message,
             status: 422,
             ok: false,
         }
     }
 
-    const queriedCustomer = await CustomerModel.findOne({
-        email: customer.email,
+    const queriedGuest = await GuestModel.findOne({
+        email: guest.email,
     }).exec()
 
-    if (!queriedCustomer) {
+    if (!queriedGuest) {
         return {
             data: 'Invalid Credentials',
             status: 401,
@@ -36,8 +36,8 @@ export const customerLogin = async (c: any): Promise<Answer> => {
     }
 
     const verifyPassword = await verfifyPassword(
-        validateCustomer.data.password,
-        queriedCustomer.password.toString()
+        validateGuest.data.password,
+        queriedGuest.password.toString()
     )
 
     if (!verifyPassword) {
@@ -48,7 +48,7 @@ export const customerLogin = async (c: any): Promise<Answer> => {
         }
     }
 
-    const token = await sign(queriedCustomer.email, process.env.JWT_SECRET!!)
+    const token = await sign(queriedGuest.email, process.env.JWT_SECRET!!)
 
     // setCookie(
     //     c,

@@ -1,20 +1,20 @@
 import mongoose from 'mongoose'
 import { Answer } from '../../../models/answer'
-import { User } from '../../../models/user'
-import { customerSchema } from '../../../db/schemas/customer'
+import { Guest } from '../../../models/guest'
+import { guestSchema } from '../../../db/schemas/guest'
 
-export const showClient = async (c: any): Promise<Answer> => {
-    const CustomerModel = mongoose.model<User>('Customer', customerSchema)
+export const showGuest = async (c: any): Promise<Answer> => {
+    const GuestModel = mongoose.model<Guest>('Customer', guestSchema)
 
     const email = c.get('jwtPayload').email
 
     try {
-        const queriedCustomer = await CustomerModel.findOne({
+        const queriedGuest = await GuestModel.findOne({
             email: email,
         }).exec()
 
         return {
-            data: queriedCustomer,
+            data: queriedGuest,
             status: 200,
             ok: true,
         }

@@ -5,7 +5,7 @@ const errors = {
     password_length: 'Password must be 4 characters',
 }
 
-export const ValidateUserRegister = z
+export const ValidateGuestRegister = z
     .object({
         name: z
             .string()
@@ -25,7 +25,7 @@ export const ValidateUserRegister = z
         message: "Passwords don't match",
     })
 
-export const ValidateUserLogin = z.object({
+export const ValidateGuestLogin = z.object({
     email: z
         .string()
         .min(1, { message: errors.invalid_credentials })
