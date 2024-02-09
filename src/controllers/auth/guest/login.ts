@@ -48,7 +48,14 @@ export const guestLogin = async (c: any): Promise<Answer> => {
         }
     }
 
-    const token = await sign(queriedGuest.email, process.env.JWT_SECRET!!)
+    const x = {
+        id: queriedGuest.id,
+        name: queriedGuest.name,
+        surname: queriedGuest.surname,
+        email: queriedGuest.email,
+    }
+
+    const token = await sign(x, process.env.JWT_SECRET!!)
 
     // setCookie(
     //     c,
