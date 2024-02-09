@@ -1,7 +1,7 @@
 import { Answer } from '../../../models/answer'
-import { User } from '../../../models/user'
+import { Guest } from '../../../models/guest'
 import { hashPassword, verfifyPassword } from '../../../utils/auth'
-import { ValidateUserLogin } from '../../../validators/auth'
+import { ValidateGuestLogin } from '../../../validators/auth'
 import { sign } from 'hono/jwt'
 import { setCookie } from 'hono/cookie'
 import mongoose from 'mongoose'
@@ -16,9 +16,9 @@ export const login = async (c: any): Promise<Answer> => {
         status: 401,
         ok: false,
     }
-    const employee = (await c.req.json()) as User
+    const employee = (await c.req.json()) as Guest
 
-    const valdiateEmployee = ValidateUserLogin.safeParse(employee)
+    const valdiateEmployee = ValidateGuestLogin.safeParse(employee)
 
     if (!valdiateEmployee.success) {
         return {

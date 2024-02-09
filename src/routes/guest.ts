@@ -1,16 +1,16 @@
 import { Hono } from 'hono'
-import { customerLogin } from '../controllers/auth/client/login'
-import { saveUser } from '../controllers/auth/client/register'
+import { guestLogin } from '../controllers/auth/guest/login'
+import { saveGuest } from '../controllers/auth/guest/register'
 
 const app = new Hono()
 
 app.post('/login', async (c) => {
-    const result = await customerLogin(c)
+    const result = await guestLogin(c)
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
 app.post('/register', async (c) => {
-    const result = await saveUser(c)
+    const result = await saveGuest(c)
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 

@@ -1,5 +1,5 @@
 export interface Reservation {
-    customerId: String
+    guestId: String
     roomNumber: Number
     roomPrice: Number
     checkIn: Date

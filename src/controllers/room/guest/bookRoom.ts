@@ -3,14 +3,14 @@ import { Answer } from '../../../models/answer'
 import { roomSchema } from '../../../db/schemas/room'
 import { Room } from '../../../models/room'
 import { Reservation } from '../../../models/reservation'
-import { customerSchema } from '../../../db/schemas/customer'
+import { guestSchema } from '../../../db/schemas/guest'
 import { reservationSchema } from '../../../db/schemas/reservation'
 import { BookDates } from '../../../models/BookDates'
-import { User } from '../../../models/user'
+import { Guest } from '../../../models/guest'
 
 export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const CustomerModel = mongoose.model<User>('customer', customerSchema)
+    const GuestModel = mongoose.model<Guest>('customer', guestSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
@@ -22,7 +22,7 @@ export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
 
     try {
         const room = await RoomModel.findOne({ number: roomNumber })
-        const client = await CustomerModel.findOne({ email: payload.email })
+        const guest = await GuestModel.findOne({ email: payload.email })
 
         if (!room) {
             return {
@@ -32,7 +32,7 @@ export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
             }
         }
 
-        if (!client) {
+        if (!guest) {
             return {
                 data: 'User not exist',
                 status: 404,
@@ -41,7 +41,7 @@ export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
         }
 
         const booking: Reservation = {
-            customerId: client.id,
+            guestId: guest.id,
             roomNumber: room?.number,
             roomPrice: room.pricePerNight,
             checkIn: bookDate.checkIn,

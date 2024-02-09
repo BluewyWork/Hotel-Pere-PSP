@@ -3,7 +3,7 @@ import { idMongo } from './id'
 
 export const ValidatorReservation = z.object({
     _id: idMongo,
-    customerId: z.string(),
+    guestId: z.string(),
     roomId: z.string(),
     checkIn: z.date(),
     checkOut: z.date(),

@@ -3,16 +3,16 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import authEmployee from './routes/employee'
 
-import roomsAdmin from './routes/room/admin'
-import client from './routes/room/client'
-import authCustomer from './routes/customer'
+import adminRooms from './routes/room/admin'
+import guest from './routes/room/guest'
+import authGuest from './routes/guest'
 import adminBooks from './routes/books/employee'
 
 import mongoose from 'mongoose'
 import 'dotenv/config'
 import { jwt } from 'hono/jwt'
 
-import userRoutes from './routes/client/index'
+import routesGuest from './routes/guest/index'
 
 const app = new Hono()
 console.log(process.env.DATABASE_URL!!)
@@ -38,12 +38,12 @@ app.use(
 // hacer middleware de empleado
 
 app.route('/auth/employee', authEmployee)
-app.route('/auth/client', authCustomer)
-app.route('/api/admin/room', roomsAdmin)
+app.route('/auth/client', authGuest)
+app.route('/api/admin/room', adminRooms)
 app.route('/api/admin/books', adminBooks)
-app.route('/api/clients', client)
+app.route('/api/clients', guest)
 
-app.route('/api/user', userRoutes)
+app.route('/api/user', routesGuest)
 
 const port = 8000
 console.log(`Server is runn-ing on port ${port}`)
