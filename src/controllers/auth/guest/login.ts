@@ -9,7 +9,7 @@ import { Guest as Guest } from '../../../models/guest'
 import { Employee } from '../../../models/employee'
 
 export const guestLogin = async (c: any): Promise<Answer> => {
-    const GuestModel = mongoose.model<Guest>('customers', guestSchema)
+    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     const guest = (await c.req.json()) as Guest
 

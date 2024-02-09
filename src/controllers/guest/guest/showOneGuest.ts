@@ -4,7 +4,7 @@ import { Guest } from '../../../models/guest'
 import { guestSchema } from '../../../db/schemas/guest'
 
 export const showGuest = async (c: any): Promise<Answer> => {
-    const GuestModel = mongoose.model<Guest>('Customer', guestSchema)
+    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     const email = c.get('jwtPayload').email
 

@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import { guestSchema } from '../../../db/schemas/guest'
 
 export const saveGuest = async (c: any): Promise<Answer> => {
-    const GuestModel = mongoose.model<Guest>('customers', guestSchema)
+    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     const guest = (await c.req.json()) as Guest
 

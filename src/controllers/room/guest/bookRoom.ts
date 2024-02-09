@@ -10,7 +10,7 @@ import { Guest } from '../../../models/guest'
 
 export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const GuestModel = mongoose.model<Guest>('customer', guestSchema)
+    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
