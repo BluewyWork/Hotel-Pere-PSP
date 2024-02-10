@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { showOneGuest } from '../../controllers/guest/guest/showOneGuest'
 import { showMyself } from '../../controllers/guest/guest/showMyself'
-import { authMiddleware } from '../../middleware/authMiddeware'
+import { auth } from '../../middleware/auth'
 
 const app = new Hono()
 
@@ -11,7 +11,7 @@ app.get('/', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.use('/me', authMiddleware)
+app.use('/me', auth)
 app.get('/me', async (c) => {
     const result = await showMyself(c)
 
