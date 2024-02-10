@@ -2,7 +2,6 @@ import { Context } from 'hono'
 import { verify } from 'hono/jwt'
 
 export async function authMiddleware(c: Context, next: Function) {
-    console.log("authMiddleware")
     console.log(c.req.header('Authorization')?.split(' ')[1] ?? null)
     const token = c.req.header('Authorization')?.split(' ')[1] ?? null
 

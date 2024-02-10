@@ -11,6 +11,10 @@ app.get('/', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
+app.get('/test', async (c) => {
+    console.log("hi")
+})
+
 app.use('/me', authMiddleware)
 app.get('/me', async (c) => {
     const result = await showMyself(c)
