@@ -11,6 +11,9 @@ export const ValidateGuestRegister = z
             .string()
             .min(1, { message: 'Invalid username. Must be 1 character.' })
             .trim(),
+        surname: z
+            .string()
+            .trim(),
         email: z
             .string()
             .min(1, { message: 'This field has to be filled.' })
