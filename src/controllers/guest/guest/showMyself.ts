@@ -7,25 +7,13 @@ import { verify } from 'hono/jwt'
 export const showMyself = async (c: any): Promise<Answer> => {
     const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
-    const email = c.get('jwtPayload').email
+    const guest = c.get('guest')
 
-    const model = verify(c, process.env.JWT_SECRET!!)
+    console.log(guest.name)
 
-    try {
-        const queriedGuest = await GuestModel.findOne({
-            email: email,
-        }).exec()
-
-        return {
-            data: queriedGuest,
-            status: 200,
-            ok: true,
-        }
-    } catch (error) {
-        return {
-            data: error,
-            status: 500,
-            ok: false,
-        }
+    return {
+        data: "testing...",
+        status: 200,
+        ok: true
     }
 }
