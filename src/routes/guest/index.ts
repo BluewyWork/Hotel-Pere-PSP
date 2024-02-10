@@ -5,15 +5,10 @@ import { authMiddleware } from '../../middleware/authMiddleware'
 
 const app = new Hono()
 
-app.get('/', async (c) => {
-    const result = await showOneGuest(c)
-
-    return c.json({ data: result.data, ok: result.ok }, result.status)
-})
-
-app.get('/test', async (c) => {
-    console.log("hi")
-})
+//Esta ruta no empieza por api debido a que se le aplica otro middleware diferent de auth
+// que es mediante headers
+// La ruta para testear:
+//http://localhost:8000/guest/me (GET)
 
 app.use('/me', authMiddleware)
 app.get('/me', async (c) => {

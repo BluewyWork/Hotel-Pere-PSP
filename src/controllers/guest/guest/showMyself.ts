@@ -1,19 +1,12 @@
-import mongoose from 'mongoose'
 import { Answer } from '../../../models/answer'
-import { Guest } from '../../../models/guest'
-import { guestSchema } from '../../../db/schemas/guest'
-import { verify } from 'hono/jwt'
+import { Context } from 'hono'
 
-export const showMyself = async (c: any): Promise<Answer> => {
-    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
-
-    const guest = c.get('guest')
-
-    console.log(guest.name)
+export const showMyself = async (c: Context): Promise<Answer> => {
+    const guest = c.get('jwtPayload')
 
     return {
-        data: "testing...",
+        data: guest,
         status: 200,
-        ok: true
+        ok: true,
     }
 }

@@ -13,6 +13,7 @@ import 'dotenv/config'
 import { jwt } from 'hono/jwt'
 
 import routesGuest from './routes/guest/index'
+import { authMiddleware } from './middleware/authMiddleware'
 
 const app = new Hono()
 console.log(process.env.DATABASE_URL!!)
@@ -41,9 +42,14 @@ app.route('/auth/employee', authEmployee)
 app.route('/auth/guest', authGuest)
 app.route('/api/admin/room', adminRooms)
 app.route('/api/admin/books', adminBooks)
-app.route('/api/guests', guest)
 
-app.route('/api/guest', routesGuest)
+
+//Las rutas para las acciones de cliente desde android comienzan en /guest
+app.use('/guest/rooms/*', authMiddleware)
+
+//guest/rooms/ rutas para acciones como reservar y listar habitaciones ,etc.
+app.route('/guest/rooms', guest)
+app.route('/guest', routesGuest)
 
 const port = 8000
 console.log(`Server is runn-ing on port ${port}`)
