@@ -1,23 +1,23 @@
 import mongoose from 'mongoose'
-import { roomSchema } from '../../../db/schemas/room'
-import { Answer } from '../../../models/answer'
-import { Room } from '../../../models/room'
+import { roomSchema } from '../../db/schemas/room'
+import { Room } from '../../models/room'
+import { Answer } from '../../models/answer'
 
-export const showRooms = async (c: any): Promise<Answer> => {
+export const employeeDeleteRoom = async (number: Number): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
-        const result = await RoomModel.find({ reserved: false })
+        const result = await RoomModel.deleteOne({ number: number })
 
-        if (result) {
+        if (result.deletedCount === 1) {
             return {
-                data: result,
+                data: 'Habitación eliminada correctamente',
                 status: 200, // Cambiado a 204 No Content
                 ok: true,
             }
         }
         return {
-            data: 'No se encontraron habitaciones',
+            data: 'No se encontró la habitación',
             status: 404, // Cambiado a 404 Not Found
             ok: false,
         }

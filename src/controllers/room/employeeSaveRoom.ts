@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'
-import { Answer } from '../../../models/answer'
-import { Room } from '../../../models/room'
-import { invalidContent } from '../../../utils/validators'
-import { ValidateRoom } from '../../../validators/room'
-import { roomSchema } from '../../../db/schemas/room'
+import { Answer } from '../../models/answer'
+import { Room } from '../../models/room'
+import { invalidContent } from '../../utils/validators'
+import { ValidateRoom } from '../../validators/room'
+import { roomSchema } from '../../db/schemas/room'
 
-export const saveRoom = async (c: any): Promise<Answer> => {
+export const employeeSaveRoom = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('Rooms', roomSchema)
 
     const room = (await c.req.json()) as Room

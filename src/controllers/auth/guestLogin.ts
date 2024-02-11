@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
-import { Answer } from '../../../models/answer'
-import { guestSchema } from '../../../db/schemas/guest'
-import { verfifyPassword } from '../../../utils/auth'
+import { Answer } from '../../models/answer'
+import { guestSchema } from '../../db/schemas/guest'
+import { verfifyPassword } from '../../utils/auth'
 import { setCookie } from 'hono/cookie'
 import { sign } from 'hono/jwt'
-import { ValidateGuestLogin } from '../../../validators/auth'
-import { Guest as Guest } from '../../../models/guest'
-import { Employee } from '../../../models/employee'
+import { ValidateGuestLogin } from '../../validators/auth'
+import { Guest as Guest } from '../../models/guest'
+import { Employee } from '../../models/employee'
 
 export const guestLogin = async (c: any): Promise<Answer> => {
     const GuestModel = mongoose.model<Guest>('guests', guestSchema)

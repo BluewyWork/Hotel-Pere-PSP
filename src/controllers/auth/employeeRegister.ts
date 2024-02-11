@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
-import { Answer } from '../../../models/answer'
-import { Employee } from '../../../models/employee'
-import { employeeSchema } from '../../../db/schemas/employee'
-import { ValidationEmployee } from '../../../validators/employee'
-import { invalidContent } from '../../../utils/validators'
-import { hashPassword } from '../../../utils/auth'
+import { Answer } from '../../models/answer'
+import { Employee } from '../../models/employee'
+import { employeeSchema } from '../../db/schemas/employee'
+import { ValidationEmployee } from '../../validators/employee'
+import { invalidContent } from '../../utils/validators'
+import { hashPassword } from '../../utils/auth'
 
-export const saveEmployee = async (c: any): Promise<Answer> => {
+export const employeeRegister = async (c: any): Promise<Answer> => {
     const EmployeeModel = mongoose.model<Employee>('Employee', employeeSchema)
 
     const employee = (await c.req.json()) as Employee

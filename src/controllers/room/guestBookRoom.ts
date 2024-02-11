@@ -1,14 +1,17 @@
 import mongoose from 'mongoose'
-import { Answer } from '../../../models/answer'
-import { roomSchema } from '../../../db/schemas/room'
-import { Room } from '../../../models/room'
-import { Reservation } from '../../../models/reservation'
-import { guestSchema } from '../../../db/schemas/guest'
-import { reservationSchema } from '../../../db/schemas/reservation'
-import { BookDates } from '../../../models/BookDates'
-import { Guest } from '../../../models/guest'
+import { Answer } from '../../models/answer'
+import { roomSchema } from '../../db/schemas/room'
+import { Room } from '../../models/room'
+import { Reservation } from '../../models/reservation'
+import { guestSchema } from '../../db/schemas/guest'
+import { reservationSchema } from '../../db/schemas/reservation'
+import { BookDates } from '../../models/bookDates'
+import { Guest } from '../../models/guest'
 
-export const bookRoom = async (c: any, roomNumber: number): Promise<Answer> => {
+export const guestBookRoom = async (
+    c: any,
+    roomNumber: number
+): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const GuestModel = mongoose.model<Guest>('guests', guestSchema)
     const ReservationModel = mongoose.model<Reservation>(

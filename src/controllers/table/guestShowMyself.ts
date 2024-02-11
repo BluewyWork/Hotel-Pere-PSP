@@ -1,7 +1,7 @@
-import { Answer } from '../../../models/answer'
+import { Answer } from '../../models/answer'
 import { Context } from 'hono'
 
-export const showMyself = async (c: Context): Promise<Answer> => {
+export const guestShowMyself = async (c: Context): Promise<Answer> => {
     const guest = c.get('jwtPayload')
 
     return {

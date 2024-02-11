@@ -1,11 +1,11 @@
-import { Answer } from '../../../models/answer'
-import { Guest as Guest } from '../../../models/guest'
-import { hashPassword } from '../../../utils/auth'
-import { ValidateGuestRegister } from '../../../validators/auth'
+import { Answer } from '../../models/answer'
+import { Guest as Guest } from '../../models/guest'
+import { hashPassword } from '../../utils/auth'
+import { ValidateGuestRegister } from '../../validators/auth'
 import mongoose from 'mongoose'
-import { guestSchema } from '../../../db/schemas/guest'
+import { guestSchema } from '../../db/schemas/guest'
 
-export const saveGuest = async (c: any): Promise<Answer> => {
+export const guestRegister = async (c: any): Promise<Answer> => {
     const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     const guest = (await c.req.json()) as Guest

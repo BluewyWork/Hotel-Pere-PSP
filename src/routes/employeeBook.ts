@@ -1,24 +1,24 @@
 import { Hono } from 'hono'
-import { showBook } from '../controllers/books/employee/showBook'
-import { showBooks } from '../controllers/books/employee/showBooks'
-import { updateBook } from '../controllers/books/employee/updateBook'
+import { employeeShowBook } from '../controllers/books/employeeShowBook'
+import { employeeShowAllBooks } from '../controllers/books/employeeShowAllBooks'
+import { employeeUpdateBook } from '../controllers/books/employeeUpdateBook'
 
 const app = new Hono()
 
 app.get('/:id', async (c) => {
-    const result = await showBook(c)
+    const result = await employeeShowBook(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
 app.get('/', async (c) => {
-    const result = await showBooks(c)
+    const result = await employeeShowAllBooks(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
 app.put('/:id', async (c) => {
-    const result = await updateBook(c)
+    const result = await employeeUpdateBook(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })

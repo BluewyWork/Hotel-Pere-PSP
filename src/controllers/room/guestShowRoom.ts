@@ -1,9 +1,12 @@
 import mongoose from 'mongoose'
-import { roomSchema } from '../../../db/schemas/room'
-import { Room } from '../../../models/room'
-import { Answer } from '../../../models/answer'
+import { roomSchema } from '../../db/schemas/room'
+import { Room } from '../../models/room'
+import { Answer } from '../../models/answer'
 
-export const showRoom = async (c: any, number: Number): Promise<Answer> => {
+export const guestShowRoom = async (
+    c: any,
+    number: Number
+): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {

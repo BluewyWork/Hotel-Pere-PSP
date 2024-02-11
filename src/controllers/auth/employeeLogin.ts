@@ -1,14 +1,14 @@
-import { Answer } from '../../../models/answer'
-import { Guest } from '../../../models/guest'
-import { hashPassword, verfifyPassword } from '../../../utils/auth'
-import { ValidateGuestLogin } from '../../../validators/auth'
+import { Answer } from '../../models/answer'
+import { Guest } from '../../models/guest'
+import { hashPassword, verfifyPassword } from '../../utils/auth'
+import { ValidateGuestLogin } from '../../validators/auth'
 import { sign } from 'hono/jwt'
 import { setCookie } from 'hono/cookie'
 import mongoose from 'mongoose'
-import { Employee } from '../../../models/employee'
-import { employeeSchema } from '../../../db/schemas/employee'
+import { Employee } from '../../models/employee'
+import { employeeSchema } from '../../db/schemas/employee'
 
-export const login = async (c: any): Promise<Answer> => {
+export const employeeLogin = async (c: any): Promise<Answer> => {
     const EmployeeModel = mongoose.model<Employee>('Employee', employeeSchema)
 
     const invalidCredentials: Answer = {

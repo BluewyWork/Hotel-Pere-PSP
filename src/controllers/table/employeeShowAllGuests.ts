@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import { guestSchema } from '../../../db/schemas/guest'
-import { Answer } from '../../../models/answer'
-import { Guest } from '../../../models/guest'
+import { guestSchema } from '../../db/schemas/guest'
+import { Answer } from '../../models/answer'
+import { Guest } from '../../models/guest'
 
-export const showAllGuests = async (c: any): Promise<Answer> => {
+export const employeeShowAllGuests = async (c: any): Promise<Answer> => {
     const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     try {
