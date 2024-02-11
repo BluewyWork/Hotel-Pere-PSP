@@ -5,16 +5,16 @@ import mongoose from 'mongoose'
 import 'dotenv/config'
 import { jwt } from 'hono/jwt'
 
-import authEmployee from './routes/authEmployee'
-import authGuest from './routes/authGuest'
+import employeeAuth from './routes/employeeAuth'
+import guestAuth from './routes/guestAuth'
 
-import roomEmployee from './routes/roomEmployee'
-import roomGuest from './routes/roomGuest'
+import employeeRoom from './routes/employeeRoom'
+import guestRoom from './routes/guestRoom'
 
-import bookEmployee from './routes/bookEmployee'
-import bookGuest from './routes/bookGuest'
+import employeeBook from './routes/employeeBook'
+import guestBook from './routes/guestBook'
 
-import tableGuest from './routes/tableGuest'
+import guestTable from './routes/guestTable'
 
 if (!process.env.DATABASE_URL || !process.env.PORT || !process.env.JWT_SECRET) {
     throw new Error('HOLD UP => MISSING ENV VARIABLES')
@@ -43,17 +43,17 @@ app.use(
 )
 
 // authentication stuff
-app.route('/auth/employee', authEmployee)
-app.route('/auth/guest', authGuest)
+app.route('/auth/employee', employeeAuth)
+app.route('/auth/guest', guestAuth)
 
 // admin operations
-app.route('/api/admin/room', roomEmployee)
-app.route('/api/admin/books', bookEmployee)
+app.route('/api/admin/room', employeeRoom)
+app.route('/api/admin/books', employeeBook)
 
 // guest operations
-app.route('/guest', tableGuest)
-app.route('/guest/room', roomGuest)
-app.route('/guest/book', bookGuest)
+app.route('/guest', guestTable)
+app.route('/guest/room', guestRoom)
+app.route('/guest/book', guestBook)
 
 // listen to incoming requests
 const port = parseInt(process.env.PORT) || 8000
