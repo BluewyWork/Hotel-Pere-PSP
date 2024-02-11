@@ -1,9 +1,9 @@
 import { Hono } from 'hono'
-import { saveRoom } from '../../controllers/room/admin/saveRoom'
-import { deleteRoom } from '../../controllers/room/admin/deleteRoom'
-import { updateRoom } from '../../controllers/room/admin/updateRoom'
-import { showRoom } from '../../controllers/room/admin/showRoom'
-import { showRooms } from '../../controllers/room/admin/showRooms'
+import { saveRoom } from '../controllers/room/admin/saveRoom'
+import { deleteRoom } from '../controllers/room/admin/deleteRoom'
+import { updateRoom } from '../controllers/room/admin/updateRoom'
+import { showRoom } from '../controllers/room/admin/showRoom'
+import { showRooms } from '../controllers/room/admin/showRooms'
 
 const app = new Hono()
 
@@ -27,10 +27,10 @@ app.put('/', async (c) => {
 })
 
 app.get('/search', async (c) => {
-    const reserved = c.req.queries('reserved') 
+    const reserved = c.req.queries('reserved')
     const bed = c.req.queries('bed')
     const price = c.req.queries('price')
-    const result = await showRoom( price , bed, reserved)
+    const result = await showRoom(price, bed, reserved)
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
