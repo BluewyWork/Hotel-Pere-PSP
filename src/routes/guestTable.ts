@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { showOneGuest } from '../controllers/table/guest/showGuest'
 import { guestShowMyself } from '../controllers/table/guestShowMyself'
 import { authMiddleware } from '../middleware/authMiddleware'
 
