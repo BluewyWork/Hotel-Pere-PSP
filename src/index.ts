@@ -45,11 +45,13 @@ app.route('/api/admin/books', adminBooks)
 
 
 //Las rutas para las acciones de cliente desde android comienzan en /guest
-app.use('/guest/rooms/*', authMiddleware)
+//app.use('/guest/rooms/*', authMiddleware)
 
 //guest/rooms/ rutas para acciones como reservar y listar habitaciones ,etc.
 app.route('/guest/room', guest)
 app.route('/guest', routesGuest)
+
+
 
 const port = 8000
 console.log(`Server is runn-ing on port ${port}`)

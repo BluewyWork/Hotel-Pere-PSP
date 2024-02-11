@@ -7,7 +7,7 @@ export const showRooms = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
-        const result = await RoomModel.find({ reserved: true })
+        const result = await RoomModel.find({ reserved: false })
 
         if (result) {
             return {
