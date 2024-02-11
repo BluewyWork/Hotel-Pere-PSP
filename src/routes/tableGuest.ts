@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
-import { showOneGuest } from '../../controllers/guest/guest/showOneGuest'
-import { showMyself } from '../../controllers/guest/guest/showMyself'
-import { authMiddleware } from '../../middleware/authMiddleware'
+import { showOneGuest } from '../controllers/guest/guest/showOneGuest'
+import { showMyself } from '../controllers/guest/guest/showMyself'
+import { authMiddleware } from '../middleware/authMiddleware'
 
 const app = new Hono()
 
