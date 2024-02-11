@@ -48,7 +48,7 @@ app.route('/api/admin/books', adminBooks)
 app.use('/guest/rooms/*', authMiddleware)
 
 //guest/rooms/ rutas para acciones como reservar y listar habitaciones ,etc.
-app.route('/guest/rooms', guest)
+app.route('/guest/room', guest)
 app.route('/guest', routesGuest)
 
 const port = 8000
