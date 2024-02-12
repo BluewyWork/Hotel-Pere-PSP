@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { guestBookRoom } from '../controllers/room/guestBookRoom'
+import { guestBookRoom } from '../controllers/book/guestBookRoom'
 
 const app = new Hono()
 
