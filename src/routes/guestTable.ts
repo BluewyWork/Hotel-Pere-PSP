@@ -18,9 +18,8 @@ app.get('/me', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.put('/,', async (c) => {
+app.put('/', async (c) => {
     const result = await updateGuest(c)
-
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 app.delete('/', async (c) => {
