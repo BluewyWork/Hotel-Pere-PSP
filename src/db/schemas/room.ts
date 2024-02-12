@@ -8,5 +8,6 @@ export const roomSchema = new Schema({
     beds: Number,
     image: String,
     reserved: Boolean,
+    dateOccupied: [Date],
     created_at: { type: Date, default: Date.now },
 })
