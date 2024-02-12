@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
-import { employeeShowBook } from '../controllers/books/employeeShowBook'
-import { employeeShowAllBooks } from '../controllers/books/employeeShowAllBooks'
-import { employeeUpdateBook } from '../controllers/books/employeeUpdateBook'
+import { employeeShowBook } from '../controllers/book/employeeShowBook'
+import { employeeShowAllBooks } from '../controllers/book/employeeShowAllBooks'
+import { employeeUpdateBook } from '../controllers/book/employeeUpdateBook'
 
 const app = new Hono()
 
