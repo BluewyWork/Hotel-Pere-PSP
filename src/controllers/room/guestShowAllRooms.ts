@@ -16,6 +16,7 @@ export const guestShowAllRooms = async (c: any): Promise<Answer> => {
                 ok: true,
             }
         }
+
         return {
             data: 'No se encontraron habitaciones',
             status: 404, // Cambiado a 404 Not Found

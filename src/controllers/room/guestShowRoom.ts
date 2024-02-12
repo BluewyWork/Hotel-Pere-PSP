@@ -19,6 +19,7 @@ export const guestShowRoom = async (
                 ok: true,
             }
         }
+
         return {
             data: 'No se encontró la habitación',
             status: 404, // Cambiado a 404 Not Found

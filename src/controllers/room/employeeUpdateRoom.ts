@@ -29,6 +29,7 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
                 ok: true,
             }
         }
+
         return {
             data: 'No se encontró la habitación',
             status: 404, // Cambiado a 404 Not Found
