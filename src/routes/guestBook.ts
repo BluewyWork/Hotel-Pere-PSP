@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
-import { guestBookRoom } from '../controllers/room/guestBookRoom'
 import { guestShowRoomsDate } from '../controllers/room/guestShowRoomsDate'
+import { guestBookRoom } from '../controllers/book/guestBookRoom'
+
 
 const app = new Hono()
 
