@@ -6,5 +6,6 @@ export interface Room {
     beds: number
     image: string
     reserved: boolean
+    dateOccupied: Date[]
     created_at?: Date
 }

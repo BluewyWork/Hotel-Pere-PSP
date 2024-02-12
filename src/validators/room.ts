@@ -9,5 +9,6 @@ export const ValidateRoom = z.object({
     beds: z.number(),
     image: z.string(),
     reserved: z.boolean(),
+    dateOccupied: z.array(z.date()),
     created_at: z.date().optional(),
 })
