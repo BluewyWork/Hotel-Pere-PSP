@@ -52,8 +52,8 @@ app.route('/api/admin/room', employeeRoom)
 app.route('/api/admin/books', employeeBook)
 
 // guest operations
-app.use('/guest/*', authMiddleware)
-app.use('/guest/book/*', authMiddleware)
+app.use('/guest/', authMiddleware)
+app.use('/guest/book/', authMiddleware)
 app.route('/guest', guestTable)
 app.route('/guest/room', guestRoom)
 app.route('/guest/book', guestBook)
