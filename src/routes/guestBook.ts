@@ -1,7 +1,6 @@
 import { Hono } from 'hono'
-import { guestBookRoom } from '../controllers/room/guestBookRoom'
 import { guestShowRoomsDate } from '../controllers/room/guestShowRoomsDate'
-
+import { guestBookRoom } from '../controllers/book/guestBookRoom'
 
 const app = new Hono()
 
@@ -19,14 +18,14 @@ app.put('/cancel/:number', async (c) => {
 })
 
 app.get('/search', async (c) => {
-    var result={
-        data:'',
+    var result = {
+        data: '',
         ok: false,
-        status: 505
+        status: 505,
     }
     const checkIn = c.req.query('checkIn')
     const checkOut = c.req.query('checkOut')
-    if(checkIn && checkOut){
+    if (checkIn && checkOut) {
         result = await guestShowRoomsDate(checkIn, checkOut)
     }
     return c.json({ data: result.data, ok: result.ok }, result.status)
