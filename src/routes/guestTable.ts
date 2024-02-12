@@ -1,6 +1,8 @@
 import { Hono } from 'hono'
 import { guestShowMyself } from '../controllers/table/guestShowMyself'
 import { authMiddleware } from '../middleware/authMiddleware'
+import { updateGuest } from '../controllers/table/guestUpdate'
+import { deleteGuest } from '../controllers/table/guestDelete'
 
 const app = new Hono()
 
@@ -12,6 +14,17 @@ const app = new Hono()
 app.use('/me', authMiddleware)
 app.get('/me', async (c) => {
     const result = await guestShowMyself(c)
+
+    return c.json({ data: result.data, ok: result.ok }, result.status)
+})
+
+app.put('/,', async (c) => {
+    const result = await updateGuest(c)
+
+    return c.json({ data: result.data, ok: result.ok }, result.status)
+})
+app.delete('/', async (c) => {
+    const result = await deleteGuest(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })

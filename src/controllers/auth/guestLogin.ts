@@ -42,7 +42,7 @@ export const guestLogin = async (c: any): Promise<Answer> => {
 
     if (!verifyPassword) {
         return {
-            data: 'UwU',
+            data: 'Invalid credentials',
             status: 422,
             ok: false,
         }
@@ -56,12 +56,6 @@ export const guestLogin = async (c: any): Promise<Answer> => {
     }
 
     const token = await sign(x, process.env.JWT_SECRET!!)
-
-    // setCookie(
-    //     c,
-    //     'jwt',
-    //     token,
-    // )
 
     return {
         data: {
