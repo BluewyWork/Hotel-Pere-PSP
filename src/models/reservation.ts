@@ -5,10 +5,10 @@ export interface Reservation {
   idCustomer: string;
   customerName: string;
   customerEmail: string;
-  roomNumber: string;
+  roomNumber: Number;
   pricePerNight: number;
   checkIn: Date;
   checkOut: Date;
   reserved: boolean;
-  created_at: Date;
+  created_at?: Date;
 }

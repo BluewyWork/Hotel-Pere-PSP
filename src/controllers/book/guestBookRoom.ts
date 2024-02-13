@@ -43,16 +43,15 @@ export const guestBookRoom = async (
             }
         }
 
-        const booking: Reservation = {
-            guestId: guest.id,
+        ReservationModel.create({
+            idCustomer: guest.id,
+            customerName: guest.name,
             roomNumber: room?.number,
-            roomPrice: room.pricePerNight,
-            checkIn: bookDate.checkIn,
-            checkOut: bookDate.checkOut,
-            status: true,
-        }
-
-        ReservationModel.create(booking)
+            pricePerNight: room.pricePerNight,
+            checkIn: new Date (bookDate.checkIn.setHours(16)),
+            checkOut: new Date(bookDate.checkOut.setHours(12)),
+            reserved: true
+        })
         RoomModel.updateOne(
             { number: roomNumber },
             { $set: { reserved: true } }
