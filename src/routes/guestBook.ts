@@ -25,11 +25,13 @@ app.get('/search', async (c) => {
         ok: false,
         status: 505
     }
+
     const checkIn = c.req.query('checkIn')
     const checkOut = c.req.query('checkOut')
-    if(checkIn && checkOut){
+    if (checkIn && checkOut) {
         result = await guestShowRoomsDate(checkIn, checkOut)
     }
+
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 

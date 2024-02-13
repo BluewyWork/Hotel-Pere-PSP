@@ -1,17 +1,17 @@
 {
-  "scripts": {
-    "dev": "tsx watch src/index.ts --env-file=.env"
-  },
-  "dependencies": {
-    "@hono/node-server": "^1.4.1",
-    "@types/bcrypt": "^5.0.2",
-    "bcrypt": "^5.1.1",
-    "hono": "^3.12.6",
-    "mongoose": "^8.1.0",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "dotenv": "^16.3.2",
-    "tsx": "^3.14.0"
-  }
+    "scripts": {
+        "dev": "tsx watch src/index.ts --env-file=.env"
+    },
+    "dependencies": {
+        "@hono/node-server": "^1.4.1",
+        "@types/bcrypt": "^5.0.2",
+        "bcrypt": "^5.1.1",
+        "hono": "^3.12.6",
+        "mongoose": "^8.1.0",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "dotenv": "^16.3.2",
+        "tsx": "^3.14.0"
+    }
 }

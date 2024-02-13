@@ -16,15 +16,20 @@ export const employeeShowRoom = async (
     reserved: any
 ): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    console.log(price, bed, reserved)
+
+    // debug
+    // console.log(price, bed, reserved)
 
     const filter: Filter = {}
+
     if (price != null) {
         filter.pricePerNight = { $gte: parseFloat(price) }
     }
+
     if (bed != null) {
         filter.beds = { $gte: parseInt(bed) }
     }
+
     if (reserved != null) {
         filter.reserved = reserved
     }
@@ -41,6 +46,7 @@ export const employeeShowRoom = async (
                 ok: true,
             }
         }
+
         return {
             data: 'No se encontró la habitación',
             status: 404, // Cambiado a 404 Not Found
@@ -48,6 +54,7 @@ export const employeeShowRoom = async (
         }
     } catch (error) {
         console.log(error)
+
         return {
             data: 'Error al procesar la solicitud',
             status: 422,

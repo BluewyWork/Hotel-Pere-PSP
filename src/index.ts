@@ -53,10 +53,12 @@ app.route('/api/admin/books', employeeBook)
 
 // guest operations
 app.use('/guest/', authMiddleware)
-app.use('/guest/book/', authMiddleware)
 app.route('/guest', guestTable)
-app.route('/guest/room', guestRoom)
+
+app.use('/guest/book/', authMiddleware)
 app.route('/guest/book', guestBook)
+
+app.route('/guest/room', guestRoom)
 
 // listen to incoming requests
 const port = parseInt(process.env.PORT) || 8000

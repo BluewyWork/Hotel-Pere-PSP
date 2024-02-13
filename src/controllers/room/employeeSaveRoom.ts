@@ -11,6 +11,7 @@ export const employeeSaveRoom = async (c: any): Promise<Answer> => {
     const room = (await c.req.json()) as Room
 
     const validation = invalidContent(room, ValidateRoom)
+
     if (validation) {
         return validation
     }
