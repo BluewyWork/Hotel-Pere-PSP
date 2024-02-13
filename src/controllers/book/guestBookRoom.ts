@@ -48,9 +48,9 @@ export const guestBookRoom = async (
             customerName: guest.name,
             roomNumber: room?.number,
             pricePerNight: room.pricePerNight,
-            checkIn: new Date (bookDate.checkIn.setHours(16)),
+            checkIn: new Date(bookDate.checkIn.setHours(16)),
             checkOut: new Date(bookDate.checkOut.setHours(12)),
-            reserved: true
+            reserved: true,
         })
         RoomModel.updateOne(
             { number: roomNumber },
