@@ -8,6 +8,7 @@ import { reservationSchema } from '../../db/schemas/reservation'
 import { ReservationDates as ReservationDates } from '../../models/reservationDates'
 import { Guest } from '../../models/guest'
 
+// TODO: fix reservation duplicates
 export const guestMakeReservation = async (
     c: any,
     roomNumber: number
