@@ -21,11 +21,11 @@ export const guestMakeReservation = async (
 
     const payload = c.get('jwtPayload')
 
-    const reservationDate = c.json as ReservationDates
+    const reservationDate = (await c.req.json()) as ReservationDates
 
     try {
         const room = await RoomModel.findOne({ number: roomNumber })
-        const guest = await GuestModel.findOne({ email: payload.email })
+        const guest = await GuestModel.findOne({ email: 'superman@gmail.com' })
 
         if (!room) {
             return {
@@ -43,27 +43,31 @@ export const guestMakeReservation = async (
             }
         }
 
-        ReservationModel.create({
-            _guestId: guest.id,
+        const checkIn = new Date(reservationDate.checkIn)
+        checkIn.setHours(16)
+
+        const checkOut = new Date(reservationDate.checkOut)
+        checkOut.setHours(12)
+
+        await ReservationModel.create({
             guestName: guest.name,
-            roomNumber: room?.number,
+            guestSurname: guest.surname,
+            guestEmail: guest.email,
+            roomNumber: room.number,
             pricePerNight: room.pricePerNight,
-            checkIn: new Date(reservationDate.checkIn.setHours(16)),
-            checkOut: new Date(reservationDate.checkOut.setHours(12)),
+            checkIn: checkIn,
+            checkOut: checkOut,
+            creationDate: new Date(),
             reserved: true,
         })
 
-        RoomModel.updateOne(
-            { number: roomNumber },
-            { $set: { reserved: true } }
-        )
-
         return {
-            data: 'Reservada realizada correctamente',
+            data: 'Reserva realizada correctamente',
             status: 201,
             ok: true,
         }
     } catch (error) {
+        console.error(error)
         return {
             data: 'Error al procesar la solicitud',
             status: 422,

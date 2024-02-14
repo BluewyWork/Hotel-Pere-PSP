@@ -7,8 +7,8 @@ export const reservationSchema = new Schema({
     guestEmail: String,
     roomNumber: Number,
     pricePerNight: Number,
-    checkIn: Date,
-    checkOut: Date,
+    checkIn: Schema.Types.Date,
+    checkOut: Schema.Types.Date,
     reserved: Boolean,
-    creationDate: Date,
+    creationDate: Schema.Types.Date,
 })
