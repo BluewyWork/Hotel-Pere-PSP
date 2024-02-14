@@ -4,14 +4,10 @@ import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
 import { boolean } from 'zod'
 
-interface Reserved {
-    reservedDays: Date[]
-}
-
 interface Filter {
     beds?: any
     pricePerNight?: any
-    reserved?: any
+    reservedDays?: any
 }
 
 export const employeeShowFilteredRooms = async (
@@ -23,19 +19,19 @@ export const employeeShowFilteredRooms = async (
 
     const filter: Filter = {}
 
-    if (price != null) {
+    if (price !== null) {
         filter.pricePerNight = { $gte: parseFloat(price) }
     }
 
-    if (bed != null) {
+    if (bed !== null) {
         filter.beds = { $gte: parseInt(bed) }
     }
 
-    if (reserved != null) {
+    if (reserved !== null) {
         if (reserved === 'notEmpty') {
-            filter.reserved = { $elemMatch: { $exists: true } }
+            filter.reservedDays = { $elemMatch: { $exists: true } }
         } else if (reserved === 'empty') {
-            filter.reserved = { $exists: false }
+            filter.reservedDays = { $exists: false }
         }
     }
 
