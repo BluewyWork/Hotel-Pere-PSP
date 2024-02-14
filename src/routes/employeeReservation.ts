@@ -1,12 +1,12 @@
 import { Hono } from 'hono'
-import { employeeShowReservation } from '../controllers/reservation/employeeShowReservation'
+import { employeeShowFilteredReservations } from '../controllers/reservation/employeeShowFilteredReservations'
 import { employeeShowAllReservations } from '../controllers/reservation/employeeShowAllReservations'
 import { employeeUpdateReservation } from '../controllers/reservation/employeeUpdateReservation'
 
 const app = new Hono()
 
-app.get('/search/:id', async (c) => {
-    const result = await employeeShowReservation(c)
+app.get('/search', async (c) => {
+    const result = await employeeShowFilteredReservations(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
