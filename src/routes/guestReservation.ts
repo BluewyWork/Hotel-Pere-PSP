@@ -5,10 +5,10 @@ import { guestCancelReservation } from '../controllers/reservation/guestCancelRe
 
 const app = new Hono()
 
-app.put('/book/:number', async (c) => {
+app.put('/new/:roomNumber', async (c) => {
     const result = await guestMakeReservation(
         c,
-        parseInt(c.req.param('number'))
+        parseInt(c.req.param('roomNumber'))
     )
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
