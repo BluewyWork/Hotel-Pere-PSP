@@ -4,7 +4,7 @@ import { guestShowRoom } from '../controllers/room/guestShowRoom'
 
 const app = new Hono()
 
-app.get('/', async (c) => {
+app.get('/all', async (c) => {
     const result = await guestShowAllFreeRooms(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)

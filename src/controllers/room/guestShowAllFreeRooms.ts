@@ -4,35 +4,30 @@ import { Answer } from '../../models/answer'
 import { Room } from '../../models/room'
 
 export const guestShowAllFreeRooms = async (c: any): Promise<Answer> => {
-    // reserved (boolean) has changed to an array of days (reservedDays)
-    return {
-        data: 'Not yet implemented...',
-        status: 400,
-        ok: false,
-    }
-
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
-        const result = await RoomModel.find({ reserved: false })
+        const result = await RoomModel.find({ reserved: { $exists: false } })
 
-        if (result) {
+        if (result && result.length > 0) {
             return {
                 data: result,
-                status: 200, // Cambiado a 204 No Content
+                status: 200,
                 ok: true,
             }
         }
 
         return {
             data: 'No se encontraron habitaciones',
-            status: 404, // Cambiado a 404 Not Found
+            status: 404,
             ok: false,
         }
     } catch (error) {
+        console.error(error)
+
         return {
             data: 'Error al procesar la solicitud',
-            status: 422,
+            status: 500,
             ok: false,
         }
     }
