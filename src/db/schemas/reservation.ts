@@ -1,15 +1,14 @@
-import mongoose from 'mongoose'
-import { boolean } from 'zod'
-
-const { Schema } = mongoose
+import { Schema } from 'mongoose'
 
 export const reservationSchema = new Schema({
-    idCustomer: String,
+    _id: Schema.ObjectId,
     customerName: String,
+    customerSurname: String,
     customerEmail: String,
     roomNumber: Number,
     pricePerNight: Number,
-    checkIn: Date,
-    checkOut: Date,
+    checkIn: Schema.Types.Date,
+    checkOut: Schema.Types.Date,
     reserved: Boolean,
+    creationDate: Schema.Types.Date,
 })

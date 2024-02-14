@@ -1,11 +1,10 @@
-import mongoose from 'mongoose'
-const { Schema } = mongoose
+import { Schema } from 'mongoose'
 
 export const guestSchema = new Schema({
+    _id: Schema.ObjectId,
     name: String,
     surname: String,
     email: String,
     image: String,
     password: String,
-    created_at: { type: Date, default: Date.now },
 })
