@@ -18,12 +18,12 @@ app.get('/me', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.put('/', async (c) => {
+app.put('/update', async (c) => {
     const result = await updateGuest(c)
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.delete('/', async (c) => {
+app.delete('/delete', async (c) => {
     const result = await deleteGuest(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
