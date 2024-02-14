@@ -52,8 +52,11 @@ export const guestLogin = async (c: any): Promise<Answer> => {
         id: queriedGuest.id,
         name: queriedGuest.name,
         surname: queriedGuest.surname,
+        image:queriedGuest.image,
         email: queriedGuest.email,
     }
+    console.log(x);
+    
 
     const token = await sign(x, process.env.JWT_SECRET!!)
 
