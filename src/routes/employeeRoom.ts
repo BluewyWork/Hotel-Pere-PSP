@@ -30,7 +30,6 @@ app.get('/search', async (c) => {
     const reserved = c.req.queries('reserved')
     const bed = c.req.queries('bed')
     const price = c.req.queries('price')
-    console.log('bed: ' + bed + ' reserved: ' + reserved + ' price: ' + price)
     const result = await employeeShowFilteredRooms(price, bed, reserved)
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
