@@ -1,13 +1,11 @@
-import mongoose from 'mongoose'
-const { Schema } = mongoose
+import { Schema } from 'mongoose'
 
 export const roomSchema = new Schema({
+    // _id: Schema.ObjectId,
     number: Number,
-    section: String,
+    description: String,
     pricePerNight: Number,
     beds: Number,
     image: String,
-    reserved: Boolean,
-    dateOccupied: [Date],
-    created_at: { type: Date, default: Date.now },
+    reservedDays: [Schema.Types.Date],
 })

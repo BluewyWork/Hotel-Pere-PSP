@@ -3,17 +3,26 @@ import { reservationSchema } from '../../db/schemas/reservation'
 import { Answer } from '../../models/answer'
 import { Reservation } from '../../models/reservation'
 
-export const employeeShowAllBooks = async (c: any): Promise<Answer> => {
+export const employeeShowReservation = async (c: any): Promise<Answer> => {
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
     )
+    const id: string = c.req.param('id')
 
     try {
-        const books = await ReservationModel.find()
+        const reservations = await ReservationModel.findById(id)
+
+        if (!reservations) {
+            return {
+                data: 'La reserva no existe',
+                status: 404,
+                ok: false,
+            }
+        }
 
         return {
-            data: books,
+            data: reservations,
             status: 200,
             ok: true,
         }

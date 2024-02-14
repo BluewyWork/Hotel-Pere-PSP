@@ -4,16 +4,23 @@ import { Room } from '../../models/room'
 import { roomSchema } from '../../db/schemas/room'
 
 export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
+    // reserved (boolean) has changed to an array of days (reservedDays)
+    return {
+        data: 'Not yet implemented...',
+        status: 400,
+        ok: false,
+    }
+
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     const room = (await c.req.json()) as Room
 
     try {
-        const result = await RoomModel.updateOne(
+        const updatedRoom = await RoomModel.updateOne(
             { number: room.number },
             {
                 $set: {
-                    section: room.section,
+                    description: room.description,
                     pricePerNight: room.pricePerNight,
                     reserved: room.reserved,
                     image: room.image,
@@ -22,17 +29,17 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
             }
         )
 
-        if ((result.upsertedCount = 1)) {
+        if ((updatedRoom.upsertedCount = 1)) {
             return {
                 data: 'Habitación actualizada correctamente',
-                status: 200, // Cambiado a 204 No Content
+                status: 200,
                 ok: true,
             }
         }
 
         return {
             data: 'No se encontró la habitación',
-            status: 404, // Cambiado a 404 Not Found
+            status: 404,
             ok: false,
         }
     } catch (error) {

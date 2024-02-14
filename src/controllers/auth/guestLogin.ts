@@ -48,7 +48,7 @@ export const guestLogin = async (c: any): Promise<Answer> => {
         }
     }
 
-    const x = {
+    const guestWithoutPassword = {
         id: queriedGuest.id,
         name: queriedGuest.name,
         surname: queriedGuest.surname,
@@ -58,7 +58,7 @@ export const guestLogin = async (c: any): Promise<Answer> => {
     console.log(x);
     
 
-    const token = await sign(x, process.env.JWT_SECRET!!)
+    const token = await sign(guestWithoutPassword, process.env.JWT_SECRET!!)
 
     return {
         data: {

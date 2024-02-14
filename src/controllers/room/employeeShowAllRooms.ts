@@ -7,19 +7,19 @@ export const employeeShowAllRooms = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
-        const result = await RoomModel.find()
+        const queriedRooms = await RoomModel.find()
 
-        if (result) {
+        if (queriedRooms) {
             return {
-                data: result,
-                status: 200, // Cambiado a 204 No Content
+                data: queriedRooms,
+                status: 200,
                 ok: true,
             }
         }
 
         return {
             data: 'No se encontraron habitaciones',
-            status: 404, // Cambiado a 404 Not Found
+            status: 404,
             ok: false,
         }
     } catch (error) {

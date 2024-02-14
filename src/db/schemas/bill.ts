@@ -1,11 +1,12 @@
-import mongoose from 'mongoose'
-const { Schema } = mongoose
+import { Schema } from 'mongoose'
 
 export const billSchema = new Schema({
-    guestId: String,
+    // _id: Schema.ObjectId,
+    _reservationId: Schema.ObjectId,
+    _guestId: Schema.ObjectId,
     guestName: String,
+    guestSurname: String,
     guestEmail: String,
-    totalAmount: Number,
-    items: Array<Map<String, number>>,
-    created_at: { type: Date, default: Date.now },
+    invoice: Number,
+    creationDate: Date,
 })

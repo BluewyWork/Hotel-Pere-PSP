@@ -1,7 +1,6 @@
 import { Answer } from '../../models/answer'
-import { Guest } from '../../models/guest'
 import { hashPassword, verfifyPassword } from '../../utils/auth'
-import { ValidateGuestLogin } from '../../validators/auth'
+import { ValidateEmployeeLogin } from '../../validators/auth'
 import { sign } from 'hono/jwt'
 import { setCookie } from 'hono/cookie'
 import mongoose from 'mongoose'
@@ -16,13 +15,14 @@ export const employeeLogin = async (c: any): Promise<Answer> => {
         status: 401,
         ok: false,
     }
-    const employee = (await c.req.json()) as Guest
 
-    const valdiateEmployee = ValidateGuestLogin.safeParse(employee)
+    const employee = (await c.req.json()) as Employee
 
-    if (!valdiateEmployee.success) {
+    const validateEmployee = ValidateEmployeeLogin.safeParse(employee)
+
+    if (!validateEmployee.success) {
         return {
-            data: valdiateEmployee.error.message,
+            data: validateEmployee.error.message,
             status: 422,
             ok: false,
         }
@@ -41,14 +41,23 @@ export const employeeLogin = async (c: any): Promise<Answer> => {
             employee.password,
             queriedEmployee.password.toString()
         )
+
         if (!verifyPassword) {
             return invalidCredentials
+        }
+
+        const employeeWithoutPassword = {
+            _id: queriedEmployee.id,
+            name: queriedEmployee.name,
+            surname: queriedEmployee.surname,
+            admin: queriedEmployee.admin,
+            email: queriedEmployee.email,
         }
 
         setCookie(
             c,
             'jwt',
-            await sign(queriedEmployee.email, process.env.JWT_SECRET!!),
+            await sign(employeeWithoutPassword, process.env.JWT_SECRET!!),
             {
                 sameSite: 'Lax',
                 path: '/',

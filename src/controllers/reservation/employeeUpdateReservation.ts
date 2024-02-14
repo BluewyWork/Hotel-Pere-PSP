@@ -3,17 +3,17 @@ import { reservationSchema } from '../../db/schemas/reservation'
 import { Answer } from '../../models/answer'
 import { Reservation } from '../../models/reservation'
 
-export const employeeUpdateBook = async (c: any): Promise<Answer> => {
+export const employeeUpdateReservation = async (c: any): Promise<Answer> => {
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
     )
 
     const id: string = c.req.param('id')
-    const book = (await c.req.json()) as Reservation
+    const reservation = (await c.req.json()) as Reservation
 
     try {
-        await ReservationModel.findOneAndUpdate({ _id: id }, book)
+        await ReservationModel.findOneAndUpdate({ _id: id }, reservation)
 
         return {
             data: 'Reserva actualizada',

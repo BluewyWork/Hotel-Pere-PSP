@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
-import { guestShowAllRooms } from '../controllers/room/guestShowAllRooms'
+import { guestShowAllFreeRooms } from '../controllers/room/guestShowAllFreeRooms'
 import { guestShowRoom } from '../controllers/room/guestShowRoom'
 
 const app = new Hono()
 
 app.get('/', async (c) => {
-    const result = await guestShowAllRooms(c)
+    const result = await guestShowAllFreeRooms(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })

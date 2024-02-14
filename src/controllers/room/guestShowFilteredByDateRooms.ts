@@ -3,7 +3,7 @@ import { Answer } from '../../models/answer'
 import { Room } from '../../models/room'
 import { roomSchema } from '../../db/schemas/room'
 
-export const guestShowRoomsDate = async (
+export const guestShowFilteredbyDateRooms = async (
     checkIn: string,
     checkOut: string
 ): Promise<Answer> => {

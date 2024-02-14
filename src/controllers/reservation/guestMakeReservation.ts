@@ -5,10 +5,10 @@ import { Room } from '../../models/room'
 import { Reservation } from '../../models/reservation'
 import { guestSchema } from '../../db/schemas/guest'
 import { reservationSchema } from '../../db/schemas/reservation'
-import { BookDates } from '../../models/bookDates'
+import { ReservationDates as ReservationDates } from '../../models/reservationDates'
 import { Guest } from '../../models/guest'
 
-export const guestBookRoom = async (
+export const guestMakeReservation = async (
     c: any,
     roomNumber: number
 ): Promise<Answer> => {
@@ -21,7 +21,7 @@ export const guestBookRoom = async (
 
     const payload = c.get('jwtPayload')
 
-    const bookDate = c.json as BookDates
+    const reservationDate = c.json as ReservationDates
 
     try {
         const room = await RoomModel.findOne({ number: roomNumber })
@@ -44,14 +44,15 @@ export const guestBookRoom = async (
         }
 
         ReservationModel.create({
-            idCustomer: guest.id,
-            customerName: guest.name,
+            _customerId: guest.id,
+            guestName: guest.name,
             roomNumber: room?.number,
             pricePerNight: room.pricePerNight,
-            checkIn: new Date (bookDate.checkIn.setHours(16)),
-            checkOut: new Date(bookDate.checkOut.setHours(12)),
-            reserved: true
+            checkIn: new Date(reservationDate.checkIn.setHours(16)),
+            checkOut: new Date(reservationDate.checkOut.setHours(12)),
+            reserved: true,
         })
+
         RoomModel.updateOne(
             { number: roomNumber },
             { $set: { reserved: true } }

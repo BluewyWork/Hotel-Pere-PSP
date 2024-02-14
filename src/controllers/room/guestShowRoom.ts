@@ -3,10 +3,7 @@ import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
 
-export const guestShowRoom = async (
-    c: any,
-    number: Number
-): Promise<Answer> => {
+export const guestShowRoom = async (number: Number): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
@@ -15,14 +12,14 @@ export const guestShowRoom = async (
         if (room) {
             return {
                 data: room,
-                status: 200, // Cambiado a 204 No Content
+                status: 200,
                 ok: true,
             }
         }
 
         return {
             data: 'No se encontró la habitación',
-            status: 404, // Cambiado a 404 Not Found
+            status: 404,
             ok: false,
         }
     } catch (error) {
