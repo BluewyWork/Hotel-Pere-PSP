@@ -36,7 +36,7 @@ export const employeeRegister = async (c: any): Promise<Answer> => {
     } catch (error) {
         return {
             data: error,
-            status: 422,
+            status: 500,
             ok: false,
         }
     }

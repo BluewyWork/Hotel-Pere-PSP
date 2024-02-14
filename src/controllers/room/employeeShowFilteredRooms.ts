@@ -10,11 +10,19 @@ interface Filter {
     reserved?: any
 }
 
-export const employeeShowRoom = async (
+export const employeeShowFilteredRooms = async (
     price: any,
     bed: any,
     reserved: any
 ): Promise<Answer> => {
+    // since reserved (boolean) has change to an array of reservedDays
+    // thus things must be changed to work properly
+    return {
+        data: 'Not yet implemented...',
+        status: 400,
+        ok: false,
+    }
+
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     // debug

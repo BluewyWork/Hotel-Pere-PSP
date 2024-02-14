@@ -3,7 +3,14 @@ import { roomSchema } from '../../db/schemas/room'
 import { Answer } from '../../models/answer'
 import { Room } from '../../models/room'
 
-export const guestShowAllRooms = async (c: any): Promise<Answer> => {
+export const guestShowAllFreeRooms = async (c: any): Promise<Answer> => {
+    // reserved (boolean) has changed to an array of days (reservedDays)
+    return {
+        data: 'Not yet implemented...',
+        status: 400,
+        ok: false,
+    }
+
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {

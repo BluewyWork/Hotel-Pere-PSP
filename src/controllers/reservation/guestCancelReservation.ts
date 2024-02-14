@@ -5,7 +5,7 @@ import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
 import { Room } from '../../models/room'
 
-export const guestBookCancel = async (c: any): Promise<Answer> => {
+export const guestCancelReservation = async (c: any): Promise<Answer> => {
     const body = await c.req.json()
     const _id = body['_id']
     const objectId = new mongoose.Types.ObjectId(_id)
@@ -27,6 +27,7 @@ export const guestBookCancel = async (c: any): Promise<Answer> => {
             const checkIn = reservation.checkIn
             const checkOut = reservation.checkOut
             const room = await RoomModel.findOne({ number: roomNumber })
+
             if (!room) {
                 return {
                     data: 'Habitación no encontrada',
@@ -36,10 +37,12 @@ export const guestBookCancel = async (c: any): Promise<Answer> => {
             } else {
                 const datesRange: Date[] = []
                 const newDate = new Date(checkIn)
+
                 while (newDate <= checkOut) {
                     datesRange.push(new Date(newDate))
                     newDate.setDate(newDate.getDate() + 1)
                 }
+
                 console.log(datesRange)
 
                 const updatedRoom = await RoomModel.updateOne(

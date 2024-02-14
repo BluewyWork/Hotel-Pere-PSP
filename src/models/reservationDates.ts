@@ -1,4 +1,4 @@
-export interface BookDates {
+export interface ReservationDates {
     checkIn: Date
     checkOut: Date
 }

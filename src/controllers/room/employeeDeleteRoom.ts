@@ -12,14 +12,14 @@ export const employeeDeleteRoom = async (number: Number): Promise<Answer> => {
         if (result.deletedCount === 1) {
             return {
                 data: 'Habitación eliminada correctamente',
-                status: 200, // Cambiado a 204 No Content
+                status: 200,
                 ok: true,
             }
         }
 
         return {
             data: 'No se encontró la habitación',
-            status: 404, // Cambiado a 404 Not Found
+            status: 404,
             ok: false,
         }
     } catch (error) {

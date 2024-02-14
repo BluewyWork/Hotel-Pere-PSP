@@ -11,8 +11,8 @@ import guestAuth from './routes/guestAuth'
 import employeeRoom from './routes/employeeRoom'
 import guestRoom from './routes/guestRoom'
 
-import employeeBook from './routes/employeeBook'
-import guestBook from './routes/guestBook'
+import employeeReservation from './routes/employeeReservation'
+import guestReservation from './routes/guestReservation'
 
 import guestTable from './routes/guestTable'
 import { authMiddleware } from './middleware/authMiddleware'
@@ -49,14 +49,14 @@ app.route('/auth/guest', guestAuth)
 
 // admin operations
 app.route('/api/admin/room', employeeRoom)
-app.route('/api/admin/books', employeeBook)
+app.route('/api/admin/reservation', employeeReservation)
 
 // guest operations
 app.use('/guest/', authMiddleware)
 app.route('/guest', guestTable)
 
-app.use('/guest/book/', authMiddleware)
-app.route('/guest/book', guestBook)
+app.use('/guest/reservation/', authMiddleware)
+app.route('/guest/reservation', guestReservation)
 
 app.route('/guest/room', guestRoom)
 

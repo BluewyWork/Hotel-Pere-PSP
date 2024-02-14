@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose'
 
 export const employeeSchema = new Schema({
-    _id: Schema.ObjectId,
+    // _id: Schema.ObjectId,
     name: String,
     surname: String,
     admin: Boolean,

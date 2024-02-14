@@ -9,5 +9,4 @@ export interface Room {
     image: string
     reserved: boolean
     dateOccupied: Date[]
-    created_at?: Date
 }
