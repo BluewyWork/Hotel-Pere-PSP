@@ -4,6 +4,10 @@ import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
 import { boolean } from 'zod'
 
+interface Reserved {
+    reservedDays: Date[]
+}
+
 interface Filter {
     beds?: any
     pricePerNight?: any
@@ -15,18 +19,7 @@ export const employeeShowFilteredRooms = async (
     bed: any,
     reserved: any
 ): Promise<Answer> => {
-    // since reserved (boolean) has change to an array of reservedDays
-    // thus things must be changed to work properly
-    return {
-        data: 'Not yet implemented...',
-        status: 400,
-        ok: false,
-    }
-
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-
-    // debug
-    // console.log(price, bed, reserved)
 
     const filter: Filter = {}
 
@@ -39,25 +32,27 @@ export const employeeShowFilteredRooms = async (
     }
 
     if (reserved != null) {
-        filter.reserved = reserved
+        if (reserved === 'notEmpty') {
+            filter.reserved = { $elemMatch: { $exists: true } }
+        } else if (reserved === 'empty') {
+            filter.reserved = { $exists: false }
+        }
     }
-
-    console.log(filter)
 
     try {
         const result = await RoomModel.find(filter)
 
-        if (result) {
+        if (result && result.length > 0) {
             return {
                 data: result,
-                status: 200, // Cambiado a 204 No Content
+                status: 200,
                 ok: true,
             }
         }
 
         return {
             data: 'No se encontró la habitación',
-            status: 404, // Cambiado a 404 Not Found
+            status: 404,
             ok: false,
         }
     } catch (error) {
@@ -65,7 +60,7 @@ export const employeeShowFilteredRooms = async (
 
         return {
             data: 'Error al procesar la solicitud',
-            status: 422,
+            status: 500,
             ok: false,
         }
     }

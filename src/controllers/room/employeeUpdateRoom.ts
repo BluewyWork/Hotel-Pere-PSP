@@ -4,13 +4,6 @@ import { Room } from '../../models/room'
 import { roomSchema } from '../../db/schemas/room'
 
 export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
-    // reserved (boolean) has changed to an array of days (reservedDays)
-    return {
-        data: 'Not yet implemented...',
-        status: 400,
-        ok: false,
-    }
-
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     const room = (await c.req.json()) as Room
@@ -22,7 +15,7 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
                 $set: {
                     description: room.description,
                     pricePerNight: room.pricePerNight,
-                    reserved: room.reserved,
+                    reservedDays: room.reservedDays,
                     image: room.image,
                     beds: room.beds,
                 },

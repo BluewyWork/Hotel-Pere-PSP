@@ -7,6 +7,5 @@ export interface Room {
     pricePerNight: number
     beds: number
     image: string
-    reserved: boolean
-    dateOccupied: Date[]
+    reservedDays: Date[]
 }
