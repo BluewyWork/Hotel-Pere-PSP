@@ -13,15 +13,15 @@ export const deleteGuest = async (c: any): Promise<Answer> => {
 
         if (result.deletedCount === 1) {
             return {
-                data: 'El cliente no existe',
-                status: 404,
+                data: 'Se ha eliminado correctamente',
+                status: 200,
                 ok: false,
             }
         }
 
         return {
-            data: 'Se ha eliminado correctamente',
-            status: 200,
+            data: 'El cliente no existe',
+            status: 400,
             ok: true,
         }
     } catch (error) {
