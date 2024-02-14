@@ -44,7 +44,7 @@ export const guestMakeReservation = async (
         }
 
         ReservationModel.create({
-            _customerId: guest.id,
+            _guestId: guest.id,
             guestName: guest.name,
             roomNumber: room?.number,
             pricePerNight: room.pricePerNight,
