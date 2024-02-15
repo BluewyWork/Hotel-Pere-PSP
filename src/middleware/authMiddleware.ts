@@ -15,5 +15,6 @@ export async function authMiddleware(c: Context, next: Function) {
     }
 
     c.set('jwtPayload', payload)
+
     return await next()
 }
