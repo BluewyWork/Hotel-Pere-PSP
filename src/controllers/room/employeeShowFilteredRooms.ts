@@ -10,11 +10,11 @@ interface Filter {
     reservedDays?: any
 }
 
-export const employeeShowFilteredRooms = async (
-    price: any,
-    bed: any,
-    reserved: any
-): Promise<Answer> => {
+export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
+    const reserved = c.req.query('reserved')
+    const bed = c.req.query('bed')
+    const price = c.req.query('price')
+
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     const filter: Filter = {}

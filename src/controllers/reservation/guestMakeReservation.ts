@@ -26,7 +26,7 @@ export const guestMakeReservation = async (
 
     try {
         const room = await RoomModel.findOne({ number: roomNumber })
-        const guest = await GuestModel.findOne({ email: 'superman@gmail.com' })
+        const guest = await GuestModel.findOne({ email: payload.email })
 
         if (!room) {
             return {

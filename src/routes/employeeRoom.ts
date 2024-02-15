@@ -27,10 +27,8 @@ app.put('/update', async (c) => {
 })
 
 app.get('/search', async (c) => {
-    const reserved = c.req.query('reserved')
-    const bed = c.req.query('bed')
-    const price = c.req.query('price')
-    const result = await employeeShowFilteredRooms(price, bed, reserved)
+    const result = await employeeShowFilteredRooms(c)
+
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
