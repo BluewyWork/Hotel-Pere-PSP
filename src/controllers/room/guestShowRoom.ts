@@ -3,30 +3,32 @@ import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
 
-export const guestShowRoom = async (number: Number): Promise<Answer> => {
+export const guestShowRoom = async (c: any): Promise<Answer> => {
+    const roomNumber = parseInt(c.req.param('roomNumber'))
+
+    if (isNaN(roomNumber)) {
+        return {
+            data: 'Parsing Error',
+            status: 400,
+            ok: true,
+        }
+    }
+
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
-    try {
-        const room = await RoomModel.findOne({ number: number })
+    const room = await RoomModel.findOne({ number: roomNumber })
 
-        if (room) {
-            return {
-                data: room,
-                status: 200,
-                ok: true,
-            }
-        }
-
+    if (!room) {
         return {
             data: 'No se encontró la habitación',
             status: 404,
             ok: false,
         }
-    } catch (error) {
-        return {
-            data: 'Error al procesar la solicitud',
-            status: 422,
-            ok: false,
-        }
+    }
+
+    return {
+        data: room,
+        status: 200,
+        ok: true,
     }
 }

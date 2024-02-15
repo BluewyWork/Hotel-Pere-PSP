@@ -10,8 +10,8 @@ app.get('/all', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.get('/:number', async (c) => {
-    const result = await guestShowRoom(c, parseInt(c.req.param('number')))
+app.get('/show/:roomNumber', async (c) => {
+    const result = await guestShowRoom(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
