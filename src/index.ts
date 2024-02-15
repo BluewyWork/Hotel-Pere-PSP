@@ -16,6 +16,7 @@ import guestReservation from './routes/guestReservation'
 
 import guestTable from './routes/guestTable'
 import { authMiddleware } from './middleware/authMiddleware'
+import employeeTableGuest from './routes/employeeTableGuest'
 
 if (!process.env.DATABASE_URL || !process.env.PORT || !process.env.JWT_SECRET) {
     throw new Error('HOLD UP => MISSING ENV VARIABLES')
@@ -50,6 +51,7 @@ app.route('/auth/guest', guestAuth)
 // admin operations
 app.route('/api/admin/room', employeeRoom)
 app.route('/api/admin/reservation', employeeReservation)
+app.route('/api/admin/tableGuest/all', employeeTableGuest)
 
 // guest operations
 // app.use('/guest/*', authMiddleware)
