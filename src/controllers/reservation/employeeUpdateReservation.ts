@@ -4,7 +4,7 @@ import { Answer } from '../../models/answer'
 import { Reservation } from '../../models/reservation'
 import { Room } from '../../models/room'
 import { roomSchema } from '../../db/schemas/room'
-import { array } from 'zod'
+import { array, number } from 'zod'
 
 export const employeeUpdateReservation = async (
     c: any,
@@ -30,12 +30,11 @@ export const employeeUpdateReservation = async (
             }
         }
 
-        const roomFree = await RoomModel.find({
+        const roomFree = await RoomModel.findOne({
+            number: reservationMongo.roomNumber,
             reservedDays: {
-                $elemMatch: {
-                    $gte: reservationUpdated.checkIn,
-                    $lte: reservationUpdated.checkOut,
-                },
+                $gte: reservationUpdated.checkIn,
+                $lte: reservationUpdated.checkOut,
             },
         })
 
@@ -47,7 +46,14 @@ export const employeeUpdateReservation = async (
         reservationMongo.checkOut = reservationUpdated.checkOut
         reservationMongo.save()
 
-        roomFr
+        roomFree.reservedDays = roomFree.reservedDays.filter((x) => {
+            return (
+                reservationMongo.checkIn !== x &&
+                reservationMongo.checkOut !== x
+            )
+        })
+
+        roomFree.save()
 
         return { data: 'Reserva actualizada', status: 200, ok: true }
     } catch (error) {
