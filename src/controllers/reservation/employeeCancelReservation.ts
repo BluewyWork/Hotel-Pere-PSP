@@ -1,14 +1,17 @@
-import mongoose from "mongoose"
-import { Room } from "../../models/room"
-import { Reservation } from "../../models/reservation"
-import { roomSchema } from "../../db/schemas/room"
-import { Answer } from "../../models/answer"
-import { reservationSchema } from "../../db/schemas/reservation"
+import mongoose from 'mongoose'
+import { Room } from '../../models/room'
+import { Reservation } from '../../models/reservation'
+import { roomSchema } from '../../db/schemas/room'
+import { Answer } from '../../models/answer'
+import { reservationSchema } from '../../db/schemas/reservation'
 
-export const employeeCancelReservation = async (c: any, id:string): Promise<Answer> => {
+export const employeeCancelReservation = async (
+    c: any,
+    id: string
+): Promise<Answer> => {
     const objectId = new mongoose.Types.ObjectId(id)
-    console.log(objectId);
-    
+    console.log(objectId)
+
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservations',
@@ -27,7 +30,7 @@ export const employeeCancelReservation = async (c: any, id:string): Promise<Answ
             const checkIn = reservation.checkIn
             const checkOut = reservation.checkOut
             const room = await RoomModel.findOne({ number: roomNumber })
-            
+
             if (!room) {
                 return {
                     data: 'Habitación no encontrada',
@@ -45,12 +48,14 @@ export const employeeCancelReservation = async (c: any, id:string): Promise<Answ
 
                 const updatedRoom = await RoomModel.updateOne(
                     { number: roomNumber },
-                    {$pull: { dateOccupied: { $in: datesRange } } }
+                    { $pull: { dateOccupied: { $in: datesRange } } }
                 )
 
-                const result = await ReservationModel.deleteOne({ _id: objectId })
-                console.log(result);
-                
+                const result = await ReservationModel.deleteOne({
+                    _id: objectId,
+                })
+                console.log(result)
+
                 if (updatedRoom.modifiedCount === 0) {
                     return {
                         data: 'No se pudo actualizar la habitación',
