@@ -3,7 +3,7 @@ import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
 
-export const guestShowRoom = async (c: any): Promise<Answer> => {
+export const publicShowRoom = async (c: any): Promise<Answer> => {
     const roomNumber = parseInt(c.req.param('roomNumber'))
 
     if (isNaN(roomNumber)) {

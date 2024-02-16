@@ -3,7 +3,7 @@ import { roomSchema } from '../../db/schemas/room'
 import { Answer } from '../../models/answer'
 import { Room } from '../../models/room'
 
-export const guestShowAllFreeRooms = async (c: any): Promise<Answer> => {
+export const publicShowAllFreeRooms = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
