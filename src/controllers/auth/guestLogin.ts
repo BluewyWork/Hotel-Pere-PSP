@@ -49,7 +49,7 @@ export const guestLogin = async (c: any): Promise<Answer> => {
     }
 
     const guestWithoutPassword = {
-        id: queriedGuest.id,
+        _id: queriedGuest.id,
         name: queriedGuest.name,
         surname: queriedGuest.surname,
         image: queriedGuest.image,
