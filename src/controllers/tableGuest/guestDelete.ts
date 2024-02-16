@@ -6,10 +6,10 @@ import { Guest } from '../../models/guest'
 export const deleteGuest = async (c: any): Promise<Answer> => {
     const GuestModel = mongoose.model<Guest>('guest', guestSchema)
 
-    const guest = (await c.req.json()) as Guest
+    const payload = c.get('jwtPayload')
 
     try {
-        const result = await GuestModel.deleteOne({ email: guest.email })
+        const result = await GuestModel.deleteOne({ _id: payload._id })
 
         if (result.deletedCount === 1) {
             return {
@@ -25,8 +25,6 @@ export const deleteGuest = async (c: any): Promise<Answer> => {
             ok: true,
         }
     } catch (error) {
-        console.error(error)
-
         return {
             data: 'Error al procesar la solicitud',
             status: 422,

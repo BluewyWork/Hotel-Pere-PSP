@@ -11,7 +11,6 @@ const app = new Hono()
 // La ruta para testear:
 //http://localhost:8000/guest/me (GET)
 
-app.use('/me', authMiddleware)
 app.get('/me', async (c) => {
     const result = await guestShowMyself(c)
 

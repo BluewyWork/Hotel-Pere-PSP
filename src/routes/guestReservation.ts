@@ -7,10 +7,7 @@ import { guestShowReservations } from '../controllers/reservation/guestShowReser
 const app = new Hono()
 
 app.put('/new/:roomNumber', async (c) => {
-    const result = await guestMakeReservation(
-        c,
-        parseInt(c.req.param('roomNumber'))
-    )
+    const result = await guestMakeReservation(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
@@ -21,7 +18,7 @@ app.delete('/cancel/', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.get("/" , async (c) =>  {
+app.get('/all', async (c) => {
     const result = await guestShowReservations(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)

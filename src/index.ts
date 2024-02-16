@@ -18,6 +18,8 @@ import guestTable from './routes/guestTable'
 import { authMiddleware } from './middleware/authMiddleware'
 import employeeTableGuest from './routes/employeeTableGuest'
 
+import publicRoom from './routes/publicRoom'
+
 if (!process.env.DATABASE_URL || !process.env.PORT || !process.env.JWT_SECRET) {
     throw new Error('HOLD UP => MISSING ENV VARIABLES')
 }
@@ -54,12 +56,17 @@ app.route('/api/admin/reservation', employeeReservation)
 app.route('/api/admin/tableGuest/all', employeeTableGuest)
 
 // guest operations
-// app.use('/guest/*', authMiddleware)
-app.route('/guest', guestTable)
+app.use('/guest/tableGuest/*', authMiddleware)
+app.route('/guest/tableGuest', guestTable)
 
+app.use('/guest/reservation/*', authMiddleware)
 app.route('/guest/reservation', guestReservation)
 
+app.use('/guest/room/*', authMiddleware)
 app.route('/guest/room', guestRoom)
+
+// public operations
+app.route('/public/room', publicRoom)
 
 // listen to incoming requests
 const port = parseInt(process.env.PORT) || 8000
