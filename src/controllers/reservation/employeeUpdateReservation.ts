@@ -30,13 +30,15 @@ export const employeeUpdateReservation = async (
             }
         }
 
-        const roomFree = await RoomModel.findOne({
-            number: reservationMongo.roomNumber,
-            reservedDays: {
-                $gte: reservationUpdated.checkIn,
-                $lte: reservationUpdated.checkOut,
-            },
-        })
+        // const roomFree = await RoomModel.findOne({
+        //     number: roomNumber,
+        //     reservedDays: {
+        //         $not: {
+        //             $gte: reservationDate.checkIn,
+        //             $lte: reservationDate.checkOut,
+        //         },
+        //     },
+        // })
 
         if (!roomFree) {
             return { data: 'Reserva no disponible', status: 400, ok: false }

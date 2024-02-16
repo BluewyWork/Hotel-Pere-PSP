@@ -40,6 +40,20 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
         }
     }
 
+    const roomFree = await RoomModel.findOne({
+        number: roomNumber,
+        reservedDays: {
+            $not: {
+                $gte: reservationDate.checkIn,
+                $lte: reservationDate.checkOut,
+            },
+        },
+    })
+
+    if (!roomFree) {
+        return { data: 'Reserva no disponible', status: 400, ok: false }
+    }
+
     try {
         const queriedRoom = await RoomModel.findOne({ number: roomNumber })
 
@@ -62,10 +76,10 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
         }
 
         const checkIn = new Date(reservationDate.checkIn)
-        checkIn.setHours(16)
+        // checkIn.setHours(16)
 
         const checkOut = new Date(reservationDate.checkOut)
-        checkOut.setHours(12)
+        // checkOut.setHours(12)
 
         await ReservationModel.create({
             guestName: queriedGuest.name,
@@ -78,6 +92,21 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
             creationDate: new Date(),
             reserved: true,
         })
+
+        // roomFree.reservedDays = roomFree.reservedDays.filter((x) => {
+        //     return (
+        //         reservationDate.checkIn !== x && reservationDate.checkOut !== x
+        //     )
+        // })
+
+        roomFree.reservedDays.forEach((e) => {
+            e._reservationId
+        })
+
+        roomFree.reservedDays.push(R)
+        roomFree.reservedDays.roomFree.reservedDays.push(checkIn)
+        roomFree.reservedDays.push(checkOut)
+        roomFree.save()
 
         return {
             data: 'Reserva realizada correctamente',

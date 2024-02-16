@@ -7,5 +7,11 @@ export const roomSchema = new Schema({
     pricePerNight: Number,
     beds: Number,
     image: String,
-    reservedDays: [Schema.Types.Date],
+    reservedDays: [
+        {
+            _reservationId: Schema.Types.ObjectId,
+            checkIn: Date,
+            checkOut: Date,
+        },
+    ],
 })
