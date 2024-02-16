@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
-import { guestShowMyself } from '../controllers/table/guestShowMyself'
+import { guestShowMyself } from '../controllers/tableGuest/guestShowMyself'
 import { authMiddleware } from '../middleware/authMiddleware'
-import { updateGuest } from '../controllers/table/guestUpdate'
-import { deleteGuest } from '../controllers/table/guestDelete'
+import { updateGuest } from '../controllers/tableGuest/guestUpdate'
+import { deleteGuest } from '../controllers/tableGuest/guestDelete'
 
 const app = new Hono()
 
