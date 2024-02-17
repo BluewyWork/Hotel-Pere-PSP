@@ -15,14 +15,14 @@ export const deleteGuest = async (c: any): Promise<Answer> => {
             return {
                 data: 'Se ha eliminado correctamente',
                 status: 200,
-                ok: false,
+                ok: true,
             }
         }
 
         return {
             data: 'El cliente no existe',
             status: 400,
-            ok: true,
+            ok: false,
         }
     } catch (error) {
         return {

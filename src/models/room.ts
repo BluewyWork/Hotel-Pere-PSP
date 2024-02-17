@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-interface Reservation {
+export interface ReservationDateRange {
     _reservationId: Types.ObjectId
     checkIn: Date
     checkOut: Date
@@ -12,5 +12,5 @@ export interface Room {
     pricePerNight: number
     beds: number
     image: string
-    reservedDays: Array<Reservation>
+    reservedDays: Array<ReservationDateRange>
 }

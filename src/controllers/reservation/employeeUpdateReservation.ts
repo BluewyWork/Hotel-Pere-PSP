@@ -30,32 +30,49 @@ export const employeeUpdateReservation = async (
             }
         }
 
-        // const roomFree = await RoomModel.findOne({
-        //     number: roomNumber,
-        //     reservedDays: {
-        //         $not: {
-        //             $gte: reservationDate.checkIn,
-        //             $lte: reservationDate.checkOut,
-        //         },
-        //     },
-        // })
+        const roomFree = await RoomModel.findOne({
+            number: reservationMongo.roomNumber,
+            reservedDays: {
+                $elemMatch: {
+                    $and: [
+                        {
+                            $or: [
+                                {
+                                    checkIn: {
+                                        $lt: reservationUpdated.checkIn,
+                                    },
+                                },
+                                {
+                                    checkOut: {
+                                        $gt: reservationUpdated.checkOut,
+                                    },
+                                },
+                            ],
+                        },
+                        { _reservationId: { $ne: reservationMongo._id } },
+                    ],
+                },
+            },
+        })
 
         if (!roomFree) {
             return { data: 'Reserva no disponible', status: 400, ok: false }
         }
 
-        reservationMongo.checkIn = reservationUpdated.checkIn
-        reservationMongo.checkOut = reservationUpdated.checkOut
+        reservationMongo.checkIn = new Date(reservationUpdated.checkIn)
+        reservationMongo.checkOut = new Date(reservationUpdated.checkOut)
+
         reservationMongo.save()
 
-        roomFree.reservedDays = roomFree.reservedDays.filter((x) => {
-            return (
-                reservationMongo.checkIn !== x &&
-                reservationMongo.checkOut !== x
-            )
-        })
+        for (let i = 0; i < roomFree.reservedDays.length; i++) {
+            const reservation = roomFree.reservedDays[i]._reservationId
+            if (reservation.equals(reservationMongo._id)) {
+                roomFree.reservedDays[i].checkIn = reservationMongo.checkIn
+                roomFree.reservedDays[i].checkOut = reservationMongo.checkOut
+            }
+        }
 
-        roomFree.save()
+        roomFree.updateOne()
 
         return { data: 'Reserva actualizada', status: 200, ok: true }
     } catch (error) {

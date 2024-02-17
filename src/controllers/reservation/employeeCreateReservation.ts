@@ -7,59 +7,73 @@ import { Guest } from '../../models/guest'
 import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
 import { ReservationDates } from '../../models/reservationDates'
+import { ReservationDateRange } from '../../models/room'
 
-export const employeeCreateReservation = async (
-    c: any,
-    roomNumber: number
-): Promise<Answer> => {
+export const employeeCreateReservation = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
     )
 
-    const payload = c.get('jwtPayload')
-
-    const reservationDate = (await c.req.json()) as ReservationDates
+    const reservation = await c.req.json()
+    const reservationCheckIn = new Date(reservation.checkIn)
+    const reservationCheckOut = new Date(reservation.checkOut)
 
     try {
-        const room = await RoomModel.findOne({ number: roomNumber })
-        const guest = await GuestModel.findOne({ email: 'superman@gmail.com' })
+        const roomFree = await RoomModel.findOne({
+            number: reservation.roomNumber,
+            reservedDays: {
+                $elemMatch: {
+                    $and: [
+                        {
+                            $or: [
+                                {
+                                    checkIn: {
+                                        $lt: reservationCheckIn,
+                                    },
+                                },
+                                {
+                                    checkOut: {
+                                        $gt: reservationCheckOut,
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        })
 
-        if (!room) {
+        if (!roomFree) {
             return {
                 data: 'Room not exist',
                 status: 404,
                 ok: false,
             }
         }
-
-        if (!guest) {
-            return {
-                data: 'User not exist',
-                status: 404,
-                ok: false,
-            }
+        const reservationDateRange = {
+            _reservationId: reservation._id,
+            checkIn: reservationCheckIn,
+            checkOut: reservationCheckOut,
         }
 
-        const checkIn = new Date(reservationDate.checkIn)
-        checkIn.setHours(16)
-
-        const checkOut = new Date(reservationDate.checkOut)
-        checkOut.setHours(12)
-
+        await RoomModel.updateOne(
+            { _id: roomFree._id },
+            { $push: { reservedDays: reservationDateRange } }
+        )
         await ReservationModel.create({
-            guestName: guest.name,
-            guestSurname: guest.surname,
-            guestEmail: guest.email,
-            roomNumber: room.number,
-            pricePerNight: room.pricePerNight,
-            checkIn: checkIn,
-            checkOut: checkOut,
+            guestName: reservation.guestName,
+            guestSurname: reservation.guestSurname,
+            guestEmail: reservation.guestEmail,
+            roomNumber: reservation.roomNumber,
+            pricePerNight: reservation.pricePerNight,
+            checkIn: reservationCheckIn,
+            checkOut: reservationCheckOut,
             creationDate: new Date(),
-            reserved: true,
         })
+
+        //roomFree.save()
 
         return {
             data: 'Reserva realizada correctamente',
