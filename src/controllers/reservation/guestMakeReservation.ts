@@ -61,22 +61,61 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
             ],
         })
 
+        const validateReservation = await ReservationModel.find({
+            roomNumber: roomNumber,
+            $or: [
+                {
+                    checkIn: {
+                        $lte: reservationCheckIn,
+                    },
+                    checkOut: {
+                        $gte: reservationCheckOut,
+                    },
+                },
+                {
+                    checkIn: {
+                        $gte: reservationCheckIn,
+                    },
+                    checkOut: {
+                        $lte: reservationCheckOut,
+                    },
+                },
+                {
+                    checkIn: {
+                        $lte: reservationCheckIn,
+                    },
+                    checkOut: {
+                        $gte: reservationCheckOut,
+                    },
+                },
+            ],
+        })
+
+        if (validateReservation.length > 0) {
+            return {
+                data: 'Reserva no disponible',
+                status: 409,
+                ok: false,
+            }
+        }
+
         if (!room) {
             return { data: 'Reserva no disponible', status: 409, ok: false }
         }
 
-        const newReservation = await ReservationModel.create({
+        const reserve = {
             guestName: payload.name,
             guestSurname: payload.surname,
             guestEmail: payload.email,
             roomNumber: reservationData.roomNumber,
-            pricePerNight: reservationData.pricePerNight,
+            pricePerNight: room.pricePerNight,
             checkIn: reservationCheckIn,
             checkOut: reservationCheckOut,
-            creationDate: new Date(),
-        })
+        }
 
-        await RoomModel.updateOne(
+        const newReservation = await ReservationModel.create(reserve)
+
+        await RoomModel.findOneAndUpdate(
             { number: reservationData.roomNumber },
             {
                 $push: {
@@ -90,14 +129,14 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
         )
 
         return {
-            data: 'Reserva realizada correctamente',
+            data: room,
             status: 201,
             ok: true,
         }
     } catch (error) {
         console.error(error)
         return {
-            data: 'Error al procesar la solicitud',
+            data: 'No hemos podido procesar tu solicitud',
             status: 422,
             ok: false,
         }
