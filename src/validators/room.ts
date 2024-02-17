@@ -8,5 +8,5 @@ export const ValidateRoom = z.object({
     pricePerNight: z.number().gt(0, 'Precio invalido'),
     beds: z.number(),
     image: z.string(),
-    reservedDays: z.array(z.string()),
+    reservedDays: z.any(),
 })

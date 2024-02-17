@@ -13,7 +13,9 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
     const payload = c.get('jwtPayload')
     console.log(payload)
 
-    const roomNumber = parseInt(c.req.param('roomNumber'))
+    const reservationDate = await c.req.json()
+
+    const roomNumber = reservationDate.roomNumber
 
     if (isNaN(roomNumber)) {
         return {
@@ -30,14 +32,32 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
         reservationSchema
     )
 
-    const reservationDate = (await c.req.json()) as ReservationDates
-
     if (!reservationDate) {
         return {
             data: 'Hmmm missing or invalid data',
             status: 400,
             ok: false,
         }
+    }
+
+    const roomFree = await RoomModel.findOne({
+        number: roomNumber,
+        reservedDays: {
+            $not: {
+                $elemMatch: {
+                    checkIn: {
+                        $gte: reservationDate.checkIn,
+                    },
+                    checkOut: {
+                        $lte: reservationDate.checkOut,
+                    },
+                },
+            },
+        },
+    })
+
+    if (!roomFree) {
+        return { data: 'Reserva no disponible', status: 400, ok: false }
     }
 
     try {

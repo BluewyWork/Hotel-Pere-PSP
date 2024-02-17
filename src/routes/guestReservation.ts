@@ -6,7 +6,7 @@ import { guestShowReservations } from '../controllers/reservation/guestShowReser
 
 const app = new Hono()
 
-app.put('/new/:roomNumber', async (c) => {
+app.put('/new', async (c) => {
     const result = await guestMakeReservation(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
@@ -26,7 +26,7 @@ app.get('/all', async (c) => {
 
 app.get('/search', async (c) => {
     var result = {
-        data: '',
+        data: 'Bad query parameters',
         ok: false,
         status: 505,
     }
