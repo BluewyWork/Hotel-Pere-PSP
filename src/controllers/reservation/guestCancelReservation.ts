@@ -4,14 +4,13 @@ import { roomSchema } from '../../db/schemas/room'
 import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
 import { Room } from '../../models/room'
+import { Context } from 'hono'
 
 export const guestCancelReservation = async (
-    c: any,
+    c: Context,
     id: string
 ): Promise<Answer> => {
-    const payload = c.get('jwtPayLoad')
-    console.log(payload)
-
+    const payload = c.get('jwtPayload')
     const objectId = new mongoose.Types.ObjectId(id)
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const ReservationModel = mongoose.model<Reservation>(

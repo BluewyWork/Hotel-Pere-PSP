@@ -15,7 +15,7 @@ export const guestShowReservations = async (c: any): Promise<Answer> => {
 
     try {
         const queriedReservations = await ReservationModel.find({
-            customerEmail: payload.email,
+            guestEmail: payload.email,
         })
 
         return {
