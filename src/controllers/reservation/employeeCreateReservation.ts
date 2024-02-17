@@ -1,13 +1,9 @@
 import mongoose from 'mongoose'
 import { Answer } from '../../models/answer'
 import { roomSchema } from '../../db/schemas/room'
-import { guestSchema } from '../../db/schemas/guest'
 import { Room } from '../../models/room'
-import { Guest } from '../../models/guest'
 import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
-import { ReservationDates } from '../../models/reservationDates'
-import { ReservationDateRange } from '../../models/room'
 
 export const employeeCreateReservation = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
@@ -16,64 +12,68 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
         reservationSchema
     )
 
-    const reservation = await c.req.json()
-    const reservationCheckIn = new Date(reservation.checkIn)
-    const reservationCheckOut = new Date(reservation.checkOut)
+    const reservationData = await c.req.json()
+    const reservationCheckIn = new Date(reservationData.checkIn)
+    const reservationCheckOut = new Date(reservationData.checkOut)
 
     try {
-        const roomFree = await RoomModel.findOne({
-            number: reservation.roomNumber,
+        const room = await RoomModel.findOne({
+            number: reservationData.roomNumber,
             reservedDays: {
                 $elemMatch: {
-                    $and: [
+                    $or: [
                         {
-                            $or: [
-                                {
-                                    checkIn: {
-                                        $lt: reservationCheckIn,
-                                    },
-                                },
-                                {
-                                    checkOut: {
-                                        $gt: reservationCheckOut,
-                                    },
-                                },
-                            ],
+                            checkIn: { $lt: reservationCheckOut },
+                            checkOut: { $gt: reservationCheckIn },
+                        },
+                        {
+                            checkIn: {
+                                $gte: reservationCheckIn,
+                                $lt: reservationCheckOut,
+                            },
+                        },
+                        {
+                            checkOut: {
+                                $gt: reservationCheckIn,
+                                $lte: reservationCheckOut,
+                            },
                         },
                     ],
                 },
             },
         })
 
-        if (!roomFree) {
+        if (room) {
             return {
-                data: 'Room not exist',
-                status: 404,
+                data: 'La habitación no está disponible para las fechas seleccionadas',
+                status: 409,
                 ok: false,
             }
         }
-        const reservationDateRange = {
-            _reservationId: reservation._id,
-            checkIn: reservationCheckIn,
-            checkOut: reservationCheckOut,
-        }
 
-        await RoomModel.updateOne(
-            { _id: roomFree._id },
-            { $push: { reservedDays: reservationDateRange } }
-        )
-        await ReservationModel.create({
-            guestName: reservation.guestName,
-            guestSurname: reservation.guestSurname,
-            guestEmail: reservation.guestEmail,
-            roomNumber: reservation.roomNumber,
-            pricePerNight: reservation.pricePerNight,
+        const newReservation = await ReservationModel.create({
+            guestName: reservationData.guestName,
+            guestSurname: reservationData.guestSurname,
+            guestEmail: reservationData.guestEmail,
+            roomNumber: reservationData.roomNumber,
+            pricePerNight: reservationData.pricePerNight,
             checkIn: reservationCheckIn,
             checkOut: reservationCheckOut,
             creationDate: new Date(),
         })
 
-        //roomFree.save()
+        await RoomModel.updateOne(
+            { number: reservationData.roomNumber },
+            {
+                $push: {
+                    reservedDays: {
+                        _reservationId: newReservation._id,
+                        checkIn: reservationCheckIn,
+                        checkOut: reservationCheckOut,
+                    },
+                },
+            }
+        )
 
         return {
             data: 'Reserva realizada correctamente',

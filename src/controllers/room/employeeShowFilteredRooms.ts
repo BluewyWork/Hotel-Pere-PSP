@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
-import { boolean } from 'zod'
 
 interface Filter {
     beds?: any
@@ -11,51 +10,57 @@ interface Filter {
 }
 
 export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
-    const reserved = c.req.query('reserved')
-    const bed = c.req.query('bed')
-    const price = c.req.query('price')
+    const bed = c.req.query('beds')
+    const price = c.req.query('pricePerNight')
+    const checkIn = c.req.query('checkIn')
+    const checkOut = c.req.query('checkOut')
+    console.log(bed, price, checkIn, checkOut)
 
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     const filter: Filter = {}
 
-    if (price !== null) {
-        filter.pricePerNight = { $gte: parseFloat(price) }
+    if (price) {
+        filter.pricePerNight = { $lte: parseFloat(price) }
     }
 
-    if (bed !== null) {
+    if (bed) {
         filter.beds = { $gte: parseInt(bed) }
     }
-
-    if (reserved !== null) {
-        if (reserved === 'notEmpty') {
-            filter.reservedDays = { $elemMatch: { $exists: true } }
-        } else if (reserved === 'empty') {
-            filter.reservedDays = { $exists: false }
+    if (checkIn && checkOut) {
+        const checkInDate = new Date(checkIn)
+        const checkOutDate = new Date(checkOut)
+        filter.reservedDays = {
+            $not: {
+                $elemMatch: {
+                    $or: [
+                        {
+                            checkIn: { $lt: checkOutDate },
+                            checkOut: { $gt: checkInDate },
+                        },
+                        {
+                            checkIn: { $gte: checkInDate, $lt: checkOutDate },
+                        },
+                        {
+                            checkOut: { $gt: checkInDate, $lte: checkOutDate },
+                        },
+                    ],
+                },
+            },
         }
     }
+    console.log(filter)
 
     try {
-        const result = await RoomModel.find(filter)
-
-        if (result && result.length > 0) {
-            return {
-                data: result,
-                status: 200,
-                ok: true,
-            }
-        }
-
+        const availableRooms = await RoomModel.find(filter)
         return {
-            data: 'No se encontró la habitación',
-            status: 404,
-            ok: false,
+            data: availableRooms,
+            status: 200,
+            ok: true,
         }
     } catch (error) {
-        console.log(error)
-
         return {
-            data: 'Error al procesar la solicitud',
+            data: 'Error al obtener las habitaciones disponibles',
             status: 500,
             ok: false,
         }

@@ -4,7 +4,6 @@ import { Answer } from '../../models/answer'
 import { Reservation } from '../../models/reservation'
 import { Room } from '../../models/room'
 import { roomSchema } from '../../db/schemas/room'
-import { array, number } from 'zod'
 
 export const employeeUpdateReservation = async (
     c: any,
@@ -17,11 +16,11 @@ export const employeeUpdateReservation = async (
         reservationSchema
     )
     const reservationUpdated = (await c.req.json()) as Reservation
+
     try {
         const reservationMongo = await ReservationModel.findOne({
             _id: objectId,
         })
-
         if (!reservationMongo) {
             return {
                 data: 'Reserva no encontrada',
@@ -33,24 +32,14 @@ export const employeeUpdateReservation = async (
         const roomFree = await RoomModel.findOne({
             number: reservationMongo.roomNumber,
             reservedDays: {
-                $elemMatch: {
-                    $and: [
-                        {
-                            $or: [
-                                {
-                                    checkIn: {
-                                        $lt: reservationUpdated.checkIn,
-                                    },
-                                },
-                                {
-                                    checkOut: {
-                                        $gt: reservationUpdated.checkOut,
-                                    },
-                                },
-                            ],
-                        },
-                        { _reservationId: { $ne: reservationMongo._id } },
-                    ],
+                $not: {
+                    $elemMatch: {
+                        $and: [
+                            { checkIn: { $lt: reservationUpdated.checkOut } },
+                            { checkOut: { $gt: reservationUpdated.checkIn } },
+                            { _reservationId: { $ne: reservationMongo._id } },
+                        ],
+                    },
                 },
             },
         })
@@ -72,7 +61,7 @@ export const employeeUpdateReservation = async (
             }
         }
 
-        roomFree.updateOne()
+        roomFree.save()
 
         return { data: 'Reserva actualizada', status: 200, ok: true }
     } catch (error) {

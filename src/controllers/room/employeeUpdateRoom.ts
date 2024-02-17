@@ -15,8 +15,6 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
                 $set: {
                     description: room.description,
                     pricePerNight: room.pricePerNight,
-                    reservedDays: room.reservedDays,
-                    image: room.image,
                     beds: room.beds,
                 },
             }
