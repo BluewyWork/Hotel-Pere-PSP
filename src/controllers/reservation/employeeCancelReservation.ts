@@ -10,7 +10,6 @@ export const employeeCancelReservation = async (
     id: string
 ): Promise<Answer> => {
     const objectId = new mongoose.Types.ObjectId(id)
-
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservations',

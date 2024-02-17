@@ -12,8 +12,8 @@ app.put('/new/:roomNumber', async (c) => {
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 
-app.delete('/cancel/', async (c) => {
-    const result = await guestCancelReservation(c)
+app.delete('/cancel/:id', async (c) => {
+    const result = await guestCancelReservation(c, c.req.param('id'))
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })

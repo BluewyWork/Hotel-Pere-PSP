@@ -38,7 +38,7 @@ app.use(
 )
 
 app.use(
-    '/api/*',
+    '/api/admin/*',
     jwt({
         secret: process.env.JWT_SECRET!!,
         cookie: 'jwt',

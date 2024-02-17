@@ -5,10 +5,14 @@ import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
 import { Room } from '../../models/room'
 
-export const guestCancelReservation = async (c: any): Promise<Answer> => {
-    const body = await c.req.json()
-    const _id = body['_id']
-    const objectId = new mongoose.Types.ObjectId(_id)
+export const guestCancelReservation = async (
+    c: any,
+    id: string
+): Promise<Answer> => {
+    const payload = c.get('jwtPayLoad')
+    console.log(payload)
+
+    const objectId = new mongoose.Types.ObjectId(id)
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservations',
@@ -23,41 +27,40 @@ export const guestCancelReservation = async (c: any): Promise<Answer> => {
                 ok: false,
             }
         } else {
-            const roomNumber = reservation.roomNumber
-            const checkIn = reservation.checkIn
-            const checkOut = reservation.checkOut
-            const room = await RoomModel.findOne({ number: roomNumber })
+            if (payload.email !== reservation.guestEmail) {
+                return {
+                    data: 'No tienes permiso para eliminar esta reserva',
+                    status: 403,
+                    ok: false,
+                }
+            }
+            const roomFree = await RoomModel.findOne({
+                number: reservation.roomNumber,
+            })
 
-            if (!room) {
+            if (!roomFree) {
                 return {
                     data: 'Habitación no encontrada',
                     status: 404,
                     ok: false,
                 }
             } else {
-                const datesRange: Date[] = []
-                const newDate = new Date(checkIn)
-
-                while (newDate <= checkOut) {
-                    datesRange.push(new Date(newDate))
-                    newDate.setDate(newDate.getDate() + 1)
-                }
-
-                console.log(datesRange)
-
-                const updatedRoom = await RoomModel.updateOne(
-                    { number: roomNumber },
-                    { $pull: { dateOccupied: { $in: datesRange } } }
-                )
-
-                const result = await ReservationModel.deleteOne({ _id: _id })
-                if (updatedRoom.modifiedCount === 0) {
-                    return {
-                        data: 'No se pudo actualizar la habitación',
-                        status: 500,
-                        ok: false,
+                for (let i = 0; i < roomFree.reservedDays.length; i++) {
+                    if (
+                        roomFree.reservedDays[i]._reservationId.equals(
+                            reservation._id
+                        )
+                    ) {
+                        roomFree.reservedDays.splice(i, 1)
+                        break
                     }
                 }
+
+                roomFree.save()
+
+                const result = await ReservationModel.deleteOne({
+                    _id: objectId,
+                })
 
                 if (result.deletedCount === 1) {
                     return {
@@ -66,11 +69,10 @@ export const guestCancelReservation = async (c: any): Promise<Answer> => {
                         ok: true,
                     }
                 }
-
                 return {
-                    data: 'Fechas eliminadas correctamente de la habitación',
-                    status: 200,
-                    ok: true,
+                    data: 'No se pudo eliminar la reserva',
+                    status: 500,
+                    ok: false,
                 }
             }
         }
