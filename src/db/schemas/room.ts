@@ -1,11 +1,17 @@
-import { Schema } from 'mongoose'
+import { Schema, Types } from 'mongoose'
 
 export const roomSchema = new Schema({
-    // _id: Schema.ObjectId,
+    //_id: Schema.ObjectId,
     number: Number,
     description: String,
     pricePerNight: Number,
     beds: Number,
     image: String,
-    reservedDays: [Schema.Types.Date],
+    reservedDays: [
+        {
+            _reservationId: Schema.Types.ObjectId,
+            checkIn: Date,
+            checkOut: Date,
+        },
+    ],
 })

@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Answer } from '../../models/answer'
-import { boolean } from 'zod'
 
 interface Filter {
     beds?: any
@@ -16,10 +15,12 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
     const price = c.req.query('pricePerNight')
     const checkIn = c.req.query('checkIn')
     const checkOut = c.req.query('checkOut')
+
     const number = c.req.query('number')
 
     console.log(bed,price);
     
+
 
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
@@ -47,32 +48,21 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
                     checkOut: {
                         $gte: checkOut,
                     },
-                },
             },
         }
     }
+    console.log(filter)
 
     try {
-        const result = await RoomModel.find(filter)
-
-        if (result && result.length > 0) {
-            return {
-                data: result,
-                status: 200,
-                ok: true,
-            }
-        }
-
+        const availableRooms = await RoomModel.find(filter)
         return {
-            data: 'No se encontró la habitación',
-            status: 404,
-            ok: false,
+            data: availableRooms,
+            status: 200,
+            ok: true,
         }
     } catch (error) {
-        console.log(error)
-
         return {
-            data: 'Error al procesar la solicitud',
+            data: 'Error al obtener las habitaciones disponibles',
             status: 500,
             ok: false,
         }

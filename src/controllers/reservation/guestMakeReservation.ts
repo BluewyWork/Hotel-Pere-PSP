@@ -3,12 +3,8 @@ import { Answer } from '../../models/answer'
 import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Reservation } from '../../models/reservation'
-import { guestSchema } from '../../db/schemas/guest'
 import { reservationSchema } from '../../db/schemas/reservation'
-import { ReservationDates as ReservationDates } from '../../models/reservationDates'
-import { Guest } from '../../models/guest'
 
-// TODO: fix reservation duplicates
 export const guestMakeReservation = async (c: any): Promise<Answer> => {
     const payload = c.get('jwtPayload')
     console.log(payload)
@@ -26,11 +22,13 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
     }
 
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
     )
+    const payload = c.get('jwtPayload')
+    console.log(payload)
+
 
     if (!reservationDate) {
         return {
@@ -39,6 +37,11 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
             ok: false,
         }
     }
+
+    const reservationData = await c.req.json()
+    const reservationCheckIn = new Date(reservationData.checkIn)
+    const reservationCheckOut = new Date(reservationData.checkOut)
+
 
     const roomFree = await RoomModel.findOne({
         number: roomNumber,
@@ -61,43 +64,63 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
     }
 
     try {
-        const queriedRoom = await RoomModel.findOne({ number: roomNumber })
-
-        if (!queriedRoom) {
-            return {
-                data: 'Room not exist',
-                status: 404,
-                ok: false,
-            }
-        }
-
-        const queriedGuest = await GuestModel.findOne({ email: payload.email })
-
-        if (!queriedGuest) {
-            return {
-                data: 'User not exist',
-                status: 404,
-                ok: false,
-            }
-        }
-
-        const checkIn = new Date(reservationDate.checkIn)
-        checkIn.setHours(16)
-
-        const checkOut = new Date(reservationDate.checkOut)
-        checkOut.setHours(12)
-
-        await ReservationModel.create({
-            guestName: queriedGuest.name,
-            guestSurname: queriedGuest.surname,
-            guestEmail: queriedGuest.email,
-            roomNumber: queriedRoom.number,
-            pricePerNight: queriedRoom.pricePerNight,
-            checkIn: checkIn,
-            checkOut: checkOut,
-            creationDate: new Date(),
-            reserved: true,
+        const room = await RoomModel.findOne({
+            number: reservationData.roomNumber,
+            reservedDays: {
+                $elemMatch: {
+                    $or: [
+                        {
+                            checkIn: { $lt: reservationCheckOut },
+                            checkOut: { $gt: reservationCheckIn },
+                        },
+                        {
+                            checkIn: {
+                                $gte: reservationCheckIn,
+                                $lt: reservationCheckOut,
+                            },
+                        },
+                        {
+                            checkOut: {
+                                $gt: reservationCheckIn,
+                                $lte: reservationCheckOut,
+                            },
+                        },
+                    ],
+                },
+            },
         })
+
+        if (room) {
+            return {
+                data: 'La habitación no está disponible para las fechas seleccionadas',
+                status: 409,
+                ok: false,
+            }
+        }
+
+        const newReservation = await ReservationModel.create({
+            guestName: payload.name,
+            guestSurname: payload.surname,
+            guestEmail: payload.email,
+            roomNumber: reservationData.roomNumber,
+            pricePerNight: reservationData.pricePerNight,
+            checkIn: reservationCheckIn,
+            checkOut: reservationCheckOut,
+            creationDate: new Date(),
+        })
+
+        await RoomModel.updateOne(
+            { number: reservationData.roomNumber },
+            {
+                $push: {
+                    reservedDays: {
+                        _reservationId: newReservation._id,
+                        checkIn: reservationCheckIn,
+                        checkOut: reservationCheckOut,
+                    },
+                },
+            }
+        )
 
         return {
             data: 'Reserva realizada correctamente',
@@ -105,8 +128,9 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
             ok: true,
         }
     } catch (error) {
+        console.error(error)
         return {
-            data: 'ERROR: ' + error,
+            data: 'Error al procesar la solicitud',
             status: 422,
             ok: false,
         }

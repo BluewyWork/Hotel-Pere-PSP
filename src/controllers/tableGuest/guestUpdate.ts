@@ -21,7 +21,6 @@ export const updateGuest = async (c: any): Promise<Answer> => {
                 ok: false,
             }
         }
-
         return {
             data: 'Se ha actualizado correctamente',
             status: 200,

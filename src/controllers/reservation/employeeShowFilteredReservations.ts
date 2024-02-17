@@ -18,15 +18,15 @@ export const employeeShowFilteredReservations = async (
     const checkIn = c.req.query('checkIn')
     const checkOut = c.req.query('checkOut')
 
-    if (guestEmail ?? null) {
+    if (guestEmail) {
         filter.guestEmail = { $eq: guestEmail }
     }
 
-    if (checkIn ?? null) {
+    if (checkIn) {
         filter.checkIn = { $eq: checkIn }
     }
 
-    if (checkOut ?? false) {
+    if (checkOut) {
         filter.checkOut = { $eq: checkOut }
     }
 
@@ -36,12 +36,11 @@ export const employeeShowFilteredReservations = async (
         'reservation',
         reservationSchema
     )
-    const id: string = c.req.param('id')
 
     try {
         const reservations = await ReservationModel.find(filter)
 
-        if (!reservations) {
+        if (reservations.length <= 0) {
             return {
                 data: 'La reserva no existe',
                 status: 404,

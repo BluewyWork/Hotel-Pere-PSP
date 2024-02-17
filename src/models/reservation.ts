@@ -10,6 +10,5 @@ export interface Reservation {
     pricePerNight: number
     checkIn: Date
     checkOut: Date
-    reserved: boolean
     creationDate: Date
 }

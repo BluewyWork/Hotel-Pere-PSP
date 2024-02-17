@@ -28,11 +28,8 @@ app.delete('/delete/:id', async (c) => {
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
-app.post('/create/:number', async (c) => {
-    const result = await employeeCreateReservation(
-        c,
-        parseInt(c.req.param('number'))
-    )
+app.post('/create', async (c) => {
+    const result = await employeeCreateReservation(c)
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
 export default app

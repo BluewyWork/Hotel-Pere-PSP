@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose'
 
 export const reservationSchema = new Schema({
-    // _id: Schema.ObjectId,
+    //_id: Schema.ObjectId,
     guestName: String,
     guestSurname: String,
     guestEmail: String,
@@ -9,6 +9,5 @@ export const reservationSchema = new Schema({
     pricePerNight: Number,
     checkIn: Schema.Types.Date,
     checkOut: Schema.Types.Date,
-    reserved: Boolean,
     creationDate: Schema.Types.Date,
 })
