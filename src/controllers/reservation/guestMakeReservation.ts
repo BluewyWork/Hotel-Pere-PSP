@@ -26,9 +26,6 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
         'reservation',
         reservationSchema
     )
-    const payload = c.get('jwtPayload')
-    console.log(payload)
-
 
     if (!reservationDate) {
         return {
@@ -42,60 +39,30 @@ export const guestMakeReservation = async (c: any): Promise<Answer> => {
     const reservationCheckIn = new Date(reservationData.checkIn)
     const reservationCheckOut = new Date(reservationData.checkOut)
 
-
-    const roomFree = await RoomModel.findOne({
-        number: roomNumber,
-        reservedDays: {
-            $not: {
-                $elemMatch: {
-                    checkIn: {
-                        $gte: reservationDate.checkIn,
-                    },
-                    checkOut: {
-                        $lte: reservationDate.checkOut,
-                    },
-                },
-            },
-        },
-    })
-
-    if (!roomFree) {
-        return { data: 'Reserva no disponible', status: 400, ok: false }
-    }
-
     try {
         const room = await RoomModel.findOne({
-            number: reservationData.roomNumber,
-            reservedDays: {
-                $elemMatch: {
-                    $or: [
-                        {
-                            checkIn: { $lt: reservationCheckOut },
-                            checkOut: { $gt: reservationCheckIn },
-                        },
-                        {
-                            checkIn: {
-                                $gte: reservationCheckIn,
-                                $lt: reservationCheckOut,
+            number: roomNumber,
+            $or: [
+                {
+                    reservedDays: {
+                        $not: {
+                            $elemMatch: {
+                                checkIn: {
+                                    $lte: reservationCheckIn,
+                                },
+                                checkOut: {
+                                    $gte: reservationCheckOut,
+                                },
                             },
                         },
-                        {
-                            checkOut: {
-                                $gt: reservationCheckIn,
-                                $lte: reservationCheckOut,
-                            },
-                        },
-                    ],
+                    },
                 },
-            },
+                { reservedDays: { $exists: false } },
+            ],
         })
 
-        if (room) {
-            return {
-                data: 'La habitación no está disponible para las fechas seleccionadas',
-                status: 409,
-                ok: false,
-            }
+        if (!room) {
+            return { data: 'Reserva no disponible', status: 409, ok: false }
         }
 
         const newReservation = await ReservationModel.create({

@@ -18,9 +18,7 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
 
     const number = c.req.query('number')
 
-    console.log(bed,price);
-    
-
+    console.log(bed, price)
 
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
@@ -48,23 +46,30 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
                     checkOut: {
                         $gte: checkOut,
                     },
+                },
             },
         }
-    }
-    console.log(filter)
+       
 
-    try {
-        const availableRooms = await RoomModel.find(filter)
-        return {
-            data: availableRooms,
-            status: 200,
-            ok: true,
+        try {
+            const availableRooms = await RoomModel.find(filter)
+            return {
+                data: availableRooms,
+                status: 200,
+                ok: true,
+            }
+        } catch (error) {
+            return {
+                data: 'Error al obtener las habitaciones disponibles',
+                status: 500,
+                ok: false,
+            }
         }
-    } catch (error) {
-        return {
-            data: 'Error al obtener las habitaciones disponibles',
-            status: 500,
-            ok: false,
-        }
+    }
+
+    return {
+        data: 'Faltan parámetros',
+        status: 400,
+        ok: false,
     }
 }
