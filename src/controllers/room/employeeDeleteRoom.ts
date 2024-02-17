@@ -30,3 +30,8 @@ export const employeeDeleteRoom = async (number: Number): Promise<Answer> => {
         }
     }
 }
+
+// Home === Habitaciones
+// Home -> crear reserva
+// Pintar->  pintar habitacion de otra manera por que no van.
+// Usuarios -> 

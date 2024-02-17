@@ -9,18 +9,16 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
     const room = (await c.req.json()) as Room
 
     try {
-        const updatedRoom = await RoomModel.updateOne(
+        const updatedRoom = await RoomModel.findOneAndUpdate(
             { number: room.number },
+            room,
             {
-                $set: {
-                    description: room.description,
-                    pricePerNight: room.pricePerNight,
-                    beds: room.beds,
-                },
+                upsert: true,
+                new: true,
             }
         )
 
-        if ((updatedRoom.upsertedCount = 1)) {
+        if (updatedRoom) {
             return {
                 data: 'Habitación actualizada correctamente',
                 status: 200,
@@ -35,7 +33,7 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
         }
     } catch (error) {
         return {
-            data: 'Error al procesar la solicitud',
+            data: error,
             status: 422,
             ok: false,
         }

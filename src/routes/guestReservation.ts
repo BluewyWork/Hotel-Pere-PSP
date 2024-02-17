@@ -6,6 +6,7 @@ import { guestShowReservations } from '../controllers/reservation/guestShowReser
 
 const app = new Hono()
 
+
 app.post('/new', async (c) => {
     const result = await guestMakeReservation(c)
 
@@ -26,7 +27,7 @@ app.get('/all', async (c) => {
 
 app.get('/search', async (c) => {
     var result = {
-        data: '',
+        data: 'Bad query parameters',
         ok: false,
         status: 505,
     }

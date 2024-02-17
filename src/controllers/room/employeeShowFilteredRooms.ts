@@ -7,6 +7,7 @@ interface Filter {
     beds?: any
     pricePerNight?: any
     reservedDays?: any
+    number?: any
 }
 
 export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
@@ -14,38 +15,39 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
     const price = c.req.query('pricePerNight')
     const checkIn = c.req.query('checkIn')
     const checkOut = c.req.query('checkOut')
-    console.log(bed, price, checkIn, checkOut)
+
+    const number = c.req.query('number')
+
+    console.log(bed,price);
+    
+
 
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     const filter: Filter = {}
 
     if (price) {
-        filter.pricePerNight = { $lte: parseFloat(price) }
+        filter.pricePerNight = { $eq: parseFloat(price) }
+    }
+
+    if (number) {
+        filter.number = { $eq: parseInt(number) }
     }
 
     if (bed) {
-        filter.beds = { $gte: parseInt(bed) }
+        filter.beds = { $eq: parseInt(bed) }
     }
+
     if (checkIn && checkOut) {
-        const checkInDate = new Date(checkIn)
-        const checkOutDate = new Date(checkOut)
         filter.reservedDays = {
             $not: {
                 $elemMatch: {
-                    $or: [
-                        {
-                            checkIn: { $lt: checkOutDate },
-                            checkOut: { $gt: checkInDate },
-                        },
-                        {
-                            checkIn: { $gte: checkInDate, $lt: checkOutDate },
-                        },
-                        {
-                            checkOut: { $gt: checkInDate, $lte: checkOutDate },
-                        },
-                    ],
-                },
+                    checkIn: {
+                        $lte: checkIn,
+                    },
+                    checkOut: {
+                        $gte: checkOut,
+                    },
             },
         }
     }
