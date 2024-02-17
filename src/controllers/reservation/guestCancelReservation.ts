@@ -11,6 +11,7 @@ export const guestCancelReservation = async (
     id: string
 ): Promise<Answer> => {
     const payload = c.get('jwtPayload')
+    console.log(payload)
     const objectId = new mongoose.Types.ObjectId(id)
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const ReservationModel = mongoose.model<Reservation>(
