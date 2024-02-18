@@ -23,11 +23,11 @@ export const employeeShowFilteredReservations = async (
     }
 
     if (checkIn) {
-        filter.checkIn = { $eq: checkIn }
+        filter.checkIn = { $gte: checkIn }
     }
 
     if (checkOut) {
-        filter.checkOut = { $eq: checkOut }
+        filter.checkOut = { $lte: checkOut }
     }
 
     console.log(filter)

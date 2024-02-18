@@ -9,6 +9,7 @@ import employeeAuth from './routes/employeeAuth'
 import guestAuth from './routes/guestAuth'
 
 import employeeRoom from './routes/employeeRoom'
+import employee from './routes/employee'
 
 import employeeReservation from './routes/employeeReservation'
 import guestReservation from './routes/guestReservation'
@@ -52,7 +53,8 @@ app.route('/auth/guest', guestAuth)
 // admin operations
 app.route('/api/admin/room', employeeRoom)
 app.route('/api/admin/reservation', employeeReservation)
-app.route('/api/admin/tableGuest/all', employeeTableGuest)
+app.route('/api/admin/tableGuest/', employeeTableGuest)
+app.route('/api/admin/employee', employee)
 
 // guest operations
 app.use('/guest/*', authMiddleware)
