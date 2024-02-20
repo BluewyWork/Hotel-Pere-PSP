@@ -8,6 +8,8 @@ export const employeeUpdateRoom = async (c: any): Promise<Answer> => {
 
     const room = (await c.req.json()) as Room
 
+    console.log(room)
+
     try {
         const updatedRoom = await RoomModel.findOneAndUpdate(
             { number: room.number },

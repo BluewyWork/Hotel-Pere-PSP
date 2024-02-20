@@ -36,6 +36,11 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
     const reservationCheckIn = new Date(reservationData.checkIn)
     const reservationCheckOut = new Date(reservationData.checkOut)
 
+    console.log(reservationData);
+    
+
+    reservationData.reseved = true
+
     try {
         const room = await RoomModel.findOne({
             number: roomNumber,
@@ -134,6 +139,7 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
         console.error(error)
         return {
             data: 'No hemos podido procesar tu solicitud',
+
             status: 422,
             ok: false,
         }
