@@ -2,9 +2,13 @@ import mongoose from 'mongoose'
 import { roomSchema } from '../../db/schemas/room'
 import { Answer } from '../../models/answer'
 import { Room } from '../../models/room'
+import { Context } from 'hono'
 
-export const employeeShowAllRooms = async (c: any): Promise<Answer> => {
+export const employeeShowAllRooms = async (c: Context): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+
+    const payload = c.get('jwtPayload')
+    console.log(payload.admin)
 
     try {
         const queriedRooms = await RoomModel.find()

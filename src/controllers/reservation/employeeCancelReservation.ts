@@ -10,8 +10,6 @@ export const employeeCancelReservation = async (
     id: string
 ): Promise<Answer> => {
     const objectId = new mongoose.Types.ObjectId(id)
-    console.log(objectId)
-
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservations',
@@ -26,43 +24,33 @@ export const employeeCancelReservation = async (
                 ok: false,
             }
         } else {
-            const roomNumber = reservation.roomNumber
-            const checkIn = reservation.checkIn
-            const checkOut = reservation.checkOut
-            const room = await RoomModel.findOne({ number: roomNumber })
+            const roomFree = await RoomModel.findOne({
+                number: reservation.roomNumber,
+            })
 
-            if (!room) {
+            if (!roomFree) {
                 return {
                     data: 'Habitación no encontrada',
                     status: 404,
                     ok: false,
                 }
             } else {
-                const datesRange: Date[] = []
-                const newDate = new Date(checkIn)
-
-                while (newDate <= checkOut) {
-                    datesRange.push(new Date(newDate))
-                    newDate.setDate(newDate.getDate() + 1)
+                for (let i = 0; i < roomFree.reservedDays.length; i++) {
+                    if (
+                        roomFree.reservedDays[i]._reservationId.equals(
+                            reservation._id
+                        )
+                    ) {
+                        roomFree.reservedDays.splice(i, 1)
+                        break
+                    }
                 }
 
-                const updatedRoom = await RoomModel.updateOne(
-                    { number: roomNumber },
-                    { $pull: { dateOccupied: { $in: datesRange } } }
-                )
+                roomFree.save()
 
                 const result = await ReservationModel.deleteOne({
                     _id: objectId,
                 })
-                console.log(result)
-
-                if (updatedRoom.modifiedCount === 0) {
-                    return {
-                        data: 'No se pudo actualizar la habitación',
-                        status: 500,
-                        ok: false,
-                    }
-                }
 
                 if (result.deletedCount === 1) {
                     return {
@@ -71,11 +59,10 @@ export const employeeCancelReservation = async (
                         ok: true,
                     }
                 }
-
                 return {
-                    data: 'Fechas eliminadas correctamente de la habitación',
-                    status: 200,
-                    ok: true,
+                    data: 'No se pudo eliminar la reserva',
+                    status: 500,
+                    ok: false,
                 }
             }
         }

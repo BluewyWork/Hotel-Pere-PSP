@@ -2,8 +2,9 @@ import mongoose from 'mongoose'
 import { reservationSchema } from '../../db/schemas/reservation'
 import { Reservation } from '../../models/reservation'
 import { Answer } from '../../models/answer'
+import { Context } from 'hono'
 
-export const guestShowReservations = async (c: any): Promise<Answer> => {
+export const guestShowReservations = async (c: Context): Promise<Answer> => {
     const ReservationModel = mongoose.model<Reservation>(
         'reservations',
         reservationSchema
@@ -15,7 +16,7 @@ export const guestShowReservations = async (c: any): Promise<Answer> => {
 
     try {
         const queriedReservations = await ReservationModel.find({
-            customerEmail: payload.email,
+            guestEmail: payload.email,
         })
 
         return {

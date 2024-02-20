@@ -4,7 +4,6 @@ import { Answer } from '../../models/answer'
 import { Reservation } from '../../models/reservation'
 import { Room } from '../../models/room'
 import { roomSchema } from '../../db/schemas/room'
-import { array, number } from 'zod'
 
 export const employeeUpdateReservation = async (
     c: any,
@@ -17,11 +16,13 @@ export const employeeUpdateReservation = async (
         reservationSchema
     )
     const reservationUpdated = (await c.req.json()) as Reservation
+
+    console.log(reservationUpdated)
+
     try {
         const reservationMongo = await ReservationModel.findOne({
             _id: objectId,
         })
-
         if (!reservationMongo) {
             return {
                 data: 'Reserva no encontrada',
@@ -33,8 +34,15 @@ export const employeeUpdateReservation = async (
         const roomFree = await RoomModel.findOne({
             number: reservationMongo.roomNumber,
             reservedDays: {
-                $gte: reservationUpdated.checkIn,
-                $lte: reservationUpdated.checkOut,
+                $not: {
+                    $elemMatch: {
+                        $and: [
+                            { checkIn: { $lt: reservationUpdated.checkOut } },
+                            { checkOut: { $gt: reservationUpdated.checkIn } },
+                            { _reservationId: { $ne: reservationMongo._id } },
+                        ],
+                    },
+                },
             },
         })
 
@@ -42,16 +50,18 @@ export const employeeUpdateReservation = async (
             return { data: 'Reserva no disponible', status: 400, ok: false }
         }
 
-        reservationMongo.checkIn = reservationUpdated.checkIn
-        reservationMongo.checkOut = reservationUpdated.checkOut
+        reservationMongo.checkIn = new Date(reservationUpdated.checkIn)
+        reservationMongo.checkOut = new Date(reservationUpdated.checkOut)
+
         reservationMongo.save()
 
-        roomFree.reservedDays = roomFree.reservedDays.filter((x) => {
-            return (
-                reservationMongo.checkIn !== x &&
-                reservationMongo.checkOut !== x
-            )
-        })
+        for (let i = 0; i < roomFree.reservedDays.length; i++) {
+            const reservation = roomFree.reservedDays[i]._reservationId
+            if (reservation.equals(reservationMongo._id)) {
+                roomFree.reservedDays[i].checkIn = reservationMongo.checkIn
+                roomFree.reservedDays[i].checkOut = reservationMongo.checkOut
+            }
+        }
 
         roomFree.save()
 

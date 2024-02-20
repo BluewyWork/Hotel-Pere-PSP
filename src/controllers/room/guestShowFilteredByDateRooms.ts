@@ -13,9 +13,23 @@ export const guestShowFilteredbyDateRooms = async (
         const checkOutDate = new Date(checkOut)
 
         const availableRooms = await RoomModel.find({
-            dateOccupied: {
-                $not: { $elemMatch: { $gte: checkInDate, $lte: checkOutDate } },
-            },
+            $or: [
+                {
+                    reservedDays: {
+                        $not: {
+                            $elemMatch: {
+                                checkIn: {
+                                    $lte: checkInDate,
+                                },
+                                checkOut: {
+                                    $gte: checkInDate,
+                                },
+                            },
+                        },
+                    },
+                },
+                { reservedDays: { $exists: false } },
+            ],
         })
 
         return {
@@ -25,7 +39,7 @@ export const guestShowFilteredbyDateRooms = async (
         }
     } catch (error) {
         return {
-            data: 'Error al procesar la solicitud',
+            data: error,
             status: 500,
             ok: false,
         }

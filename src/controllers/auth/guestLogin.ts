@@ -7,8 +7,9 @@ import { sign } from 'hono/jwt'
 import { ValidateGuestLogin } from '../../validators/auth'
 import { Guest as Guest } from '../../models/guest'
 import { Employee } from '../../models/employee'
+import { Context } from 'hono'
 
-export const guestLogin = async (c: any): Promise<Answer> => {
+export const guestLogin = async (c: Context): Promise<Answer> => {
     const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     const guest = (await c.req.json()) as Guest
@@ -37,7 +38,7 @@ export const guestLogin = async (c: any): Promise<Answer> => {
 
     const verifyPassword = await verfifyPassword(
         validateGuest.data.password,
-        queriedGuest.password.toString()
+        queriedGuest.password
     )
 
     if (!verifyPassword) {
@@ -57,6 +58,8 @@ export const guestLogin = async (c: any): Promise<Answer> => {
     }
 
     const token = await sign(guestWithoutPassword, process.env.JWT_SECRET!!)
+
+    console.log(token)
 
     return {
         data: {

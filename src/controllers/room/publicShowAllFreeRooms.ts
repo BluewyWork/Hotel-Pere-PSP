@@ -7,9 +7,19 @@ export const publicShowAllFreeRooms = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     try {
-        const result = await RoomModel.find({ reserved: { $exists: false } })
+        const result = await RoomModel.find({
+            reservedDays: {
+                $not: {
+                    $elemMatch: {
+                        checkIn: {
+                            $eq: Date.now(),
+                        },
+                    },
+                },
+            },
+        })
 
-        if (result && result.length > 0) {
+        if (result) {
             return {
                 data: result,
                 status: 200,

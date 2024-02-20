@@ -1,8 +1,7 @@
 import { Types } from 'mongoose'
 
 export interface Reservation {
-    _id: Types.ObjectId
-    _guestId: Types.ObjectId
+    _id: string
     guestName: string
     guestSurname: string
     guestEmail: string
@@ -10,6 +9,5 @@ export interface Reservation {
     pricePerNight: number
     checkIn: Date
     checkOut: Date
-    reserved: boolean
     creationDate: Date
 }

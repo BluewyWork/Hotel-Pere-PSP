@@ -38,7 +38,7 @@ app.use(
 )
 
 app.use(
-    '/api/*',
+    '/api/admin/*',
     jwt({
         secret: process.env.JWT_SECRET!!,
         cookie: 'jwt',
@@ -52,13 +52,12 @@ app.route('/auth/guest', guestAuth)
 // admin operations
 app.route('/api/admin/room', employeeRoom)
 app.route('/api/admin/reservation', employeeReservation)
-app.route('/api/admin/tableGuest/all', employeeTableGuest)
+app.route('/api/admin/tableGuest', employeeTableGuest)
 
 // guest operations
-app.use('/guest/tableGuest/*', authMiddleware)
+app.use('/guest/*', authMiddleware)
 app.route('/guest/tableGuest', guestTable)
 
-app.use('/guest/reservation/*', authMiddleware)
 app.route('/guest/reservation', guestReservation)
 
 // public operations

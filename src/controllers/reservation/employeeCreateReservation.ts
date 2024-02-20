@@ -1,65 +1,84 @@
 import mongoose from 'mongoose'
 import { Answer } from '../../models/answer'
 import { roomSchema } from '../../db/schemas/room'
-import { guestSchema } from '../../db/schemas/guest'
 import { Room } from '../../models/room'
-import { Guest } from '../../models/guest'
 import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
-import { ReservationDates } from '../../models/reservationDates'
 
-export const employeeCreateReservation = async (
-    c: any,
-    roomNumber: number
-): Promise<Answer> => {
+export const employeeCreateReservation = async (c: any): Promise<Answer> => {
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
     const ReservationModel = mongoose.model<Reservation>(
         'reservation',
         reservationSchema
     )
 
-    const payload = c.get('jwtPayload')
+    const reservationData = await c.req.json()
+    const reservationCheckIn = new Date(reservationData.checkIn)
+    const reservationCheckOut = new Date(reservationData.checkOut)
 
-    const reservationDate = (await c.req.json()) as ReservationDates
+    console.log(reservationData);
+    
+
+    reservationData.reseved = true
 
     try {
-        const room = await RoomModel.findOne({ number: roomNumber })
-        const guest = await GuestModel.findOne({ email: 'superman@gmail.com' })
-
-        if (!room) {
-            return {
-                data: 'Room not exist',
-                status: 404,
-                ok: false,
-            }
-        }
-
-        if (!guest) {
-            return {
-                data: 'User not exist',
-                status: 404,
-                ok: false,
-            }
-        }
-
-        const checkIn = new Date(reservationDate.checkIn)
-        checkIn.setHours(16)
-
-        const checkOut = new Date(reservationDate.checkOut)
-        checkOut.setHours(12)
-
-        await ReservationModel.create({
-            guestName: guest.name,
-            guestSurname: guest.surname,
-            guestEmail: guest.email,
-            roomNumber: room.number,
-            pricePerNight: room.pricePerNight,
-            checkIn: checkIn,
-            checkOut: checkOut,
-            creationDate: new Date(),
-            reserved: true,
+        const room = await RoomModel.findOne({
+            number: reservationData.roomNumber,
+            reservedDays: {
+                $elemMatch: {
+                    $or: [
+                        {
+                            checkIn: { $lt: reservationCheckOut },
+                            checkOut: { $gt: reservationCheckIn },
+                        },
+                        {
+                            checkIn: {
+                                $gte: reservationCheckIn,
+                                $lt: reservationCheckOut,
+                            },
+                        },
+                        {
+                            checkOut: {
+                                $gt: reservationCheckIn,
+                                $lte: reservationCheckOut,
+                            },
+                        },
+                    ],
+                },
+            },
         })
+
+        if (room) {
+            return {
+                data: 'La habitación no está disponible para las fechas seleccionadas',
+                status: 409,
+                ok: false,
+            }
+        }
+
+        const newReservation = await ReservationModel.create({
+            guestName: reservationData.guestName,
+            guestSurname: reservationData.guestSurname,
+            guestEmail: reservationData.guestEmail,
+            roomNumber: reservationData.roomNumber,
+            pricePerNight: reservationData.pricePerNight,
+            checkIn: reservationCheckIn,
+            checkOut: reservationCheckOut,
+            creationDate: new Date(),
+        })
+
+        await RoomModel.updateOne(
+            { number: reservationData.roomNumber },
+            {
+                $push: {
+                    reservedDays: {
+                        _reservationId: newReservation._id,
+                        checkIn: reservationCheckIn,
+                        checkOut: reservationCheckOut,
+                    },
+                },
+            }
+        )
 
         return {
             data: 'Reserva realizada correctamente',
@@ -69,7 +88,7 @@ export const employeeCreateReservation = async (
     } catch (error) {
         console.error(error)
         return {
-            data: 'Error al procesar la solicitud',
+            data: error,
             status: 422,
             ok: false,
         }

@@ -17,12 +17,15 @@ export const verfifyPassword = async (
     password: string,
     hash: string
 ): Promise<Boolean> => {
+
+    console.log(password, hash)
+
     return await bcrypt
         .compare(password, hash)
-        .then((res) => {
-            return res
+        .then((result: Boolean) => {
+            return result
         })
-        .catch((err) => {
-            return err
+        .catch((err: string) => {
+            return false
         })
 }
