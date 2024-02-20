@@ -17,6 +17,8 @@ export const employeeUpdateReservation = async (
     )
     const reservationUpdated = (await c.req.json()) as Reservation
 
+    console.log(reservationUpdated)
+
     try {
         const reservationMongo = await ReservationModel.findOne({
             _id: objectId,

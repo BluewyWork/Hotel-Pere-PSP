@@ -7,8 +7,7 @@ import { reservationSchema } from '../../db/schemas/reservation'
 
 export const guestMakeReservation = async (c: any): Promise<Answer> => {
     const payload = c.get('jwtPayload')
-    console.log(payload)
-
+    
     const reservationDate = await c.req.json()
 
     const roomNumber = reservationDate.roomNumber

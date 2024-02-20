@@ -52,7 +52,7 @@ app.route('/auth/guest', guestAuth)
 // admin operations
 app.route('/api/admin/room', employeeRoom)
 app.route('/api/admin/reservation', employeeReservation)
-app.route('/api/admin/tableGuest/all', employeeTableGuest)
+app.route('/api/admin/tableGuest', employeeTableGuest)
 
 // guest operations
 app.use('/guest/*', authMiddleware)
