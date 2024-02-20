@@ -31,7 +31,9 @@ export const employeeDeleteRoom = async (number: Number): Promise<Answer> => {
     }
 }
 
+// Eliminar las reservas si el array de reservas esta vacio
+
 // Home === Habitaciones
 // Home -> crear reserva
 // Pintar->  pintar habitacion de otra manera por que no van.
-// Usuarios -> 
+// Usuarios ->

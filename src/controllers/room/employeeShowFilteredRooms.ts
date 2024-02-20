@@ -7,7 +7,7 @@ interface Filter {
     beds?: any
     pricePerNight?: any
     reservedDays?: any
-    number?: any
+    //number?: any
 }
 
 export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
@@ -25,15 +25,15 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
     const filter: Filter = {}
 
     if (price) {
-        filter.pricePerNight = { $eq: parseFloat(price) }
+        filter.pricePerNight = { $lte: parseFloat(price) }
     }
 
-    if (number) {
+    /*if (number) {
         filter.number = { $eq: parseInt(number) }
-    }
+    }*/
 
     if (bed) {
-        filter.beds = { $eq: parseInt(bed) }
+        filter.beds = { $gte: parseInt(bed) }
     }
 
     if (checkIn && checkOut) {
@@ -49,7 +49,6 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
                 },
             },
         }
-       
 
         try {
             const availableRooms = await RoomModel.find(filter)
