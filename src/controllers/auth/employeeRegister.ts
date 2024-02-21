@@ -6,11 +6,33 @@ import { ValidationEmployee } from '../../validators/employee'
 import { invalidContent } from '../../utils/validators'
 import { hashPassword } from '../../utils/auth'
 import { Context } from 'hono'
+import { getCookie } from 'hono/cookie'
+import { decode, verify } from 'hono/jwt'
 
 export const employeeRegister = async (c: Context): Promise<Answer> => {
     const EmployeeModel = mongoose.model<Employee>('Employee', employeeSchema)
 
-    const payload = c.get('jwtPayload')
+    const cookie = getCookie(c).jwt
+
+    if (!cookie) {
+        return {
+            data: 'No autorizado',
+            status: 401,
+            ok: false,
+        }
+    }
+
+    const veriFy = await verify(cookie, process.env.JWT_SECRET as string)
+
+    if (!veriFy) {
+        return {
+            data: 'No autorizado',
+            status: 401,
+            ok: false,
+        }
+    }
+
+    const { payload } = decode(cookie)
 
     if (!payload || !payload.admin) {
         return {
