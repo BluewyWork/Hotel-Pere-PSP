@@ -22,7 +22,7 @@ export const guestShowFilteredbyDateRooms = async (
                                     $lte: checkInDate,
                                 },
                                 checkOut: {
-                                    $gte: checkInDate,
+                                    $gte: checkOutDate,
                                 },
                             },
                         },

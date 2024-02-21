@@ -16,59 +16,64 @@ export const employeeShowFilteredRooms = async (c: any): Promise<Answer> => {
     const checkIn = c.req.query('checkIn')
     const checkOut = c.req.query('checkOut')
 
-    const number = c.req.query('number')
-
-    console.log(bed, price)
-
     const RoomModel = mongoose.model<Room>('rooms', roomSchema)
 
     const filter: Filter = {}
 
     if (price) {
-        filter.pricePerNight = { $lte: parseFloat(price) }
+        filter.pricePerNight = { $eq: price.replace(',', '.') }
     }
-
-    /*if (number) {
-        filter.number = { $eq: parseInt(number) }
-    }*/
 
     if (bed) {
-        filter.beds = { $gte: parseInt(bed) }
+        filter.beds = { $eq: parseInt(bed) }
     }
 
-    if (checkIn && checkOut) {
-        filter.reservedDays = {
-            $not: {
-                $elemMatch: {
-                    checkIn: {
-                        $lte: checkIn,
-                    },
-                    checkOut: {
-                        $gte: checkOut,
+    try {
+        if (checkIn && checkOut) {
+            const checkInParse = new Date(
+                parseDateWithMidnight(oneMoreDay(checkIn))
+            )
+            const checkOutParse = new Date(
+                parseDateWithMidnight(oneMoreDay(checkOut))
+            )
+
+            filter.reservedDays = {
+                $not: {
+                    $elemMatch: {
+                        checkIn: {
+                            $lte: checkInParse,
+                        },
+                        checkOut: {
+                            $gte: checkOutParse,
+                        },
                     },
                 },
-            },
-        }
-
-        try {
-            const availableRooms = await RoomModel.find(filter)
-            return {
-                data: availableRooms,
-                status: 200,
-                ok: true,
-            }
-        } catch (error) {
-            return {
-                data: 'Error al obtener las habitaciones disponibles',
-                status: 500,
-                ok: false,
             }
         }
-    }
+        let rooms = await RoomModel.find(filter)
 
-    return {
-        data: 'Faltan parámetros',
-        status: 400,
-        ok: false,
+        return {
+            data: rooms,
+            status: 200,
+            ok: true,
+        }
+    } catch (error) {
+        return {
+            data: 'Error al obtener las habitaciones disponibles',
+            status: 500,
+            ok: false,
+        }
     }
+}
+
+function parseDateWithMidnight(date: any) {
+    const [datePart, timePart] = new Date(date).toISOString().split('T')
+    console.log('datePart', datePart)
+    return `${datePart}T00:00:00.000Z`
+}
+
+function oneMoreDay(date: any) {
+    const newDate = new Date(date)
+    newDate.setDate(newDate.getDate() + 1)
+    return newDate
 }
