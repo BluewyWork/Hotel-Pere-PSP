@@ -16,13 +16,13 @@ export const updateGuest = async (c: any): Promise<Answer> => {
 
         if (result.modifiedCount === 0) {
             return {
-                data: 'El cliente no existe',
+                data: { message: 'No se ha actualizado correctamente' },
                 status: 404,
                 ok: false,
             }
         }
         return {
-            data: 'Se ha actualizado correctamente',
+            data: { message: 'Se ha actualizado correctamente'},
             status: 200,
             ok: true,
         }
@@ -30,7 +30,7 @@ export const updateGuest = async (c: any): Promise<Answer> => {
         console.error(error)
 
         return {
-            data: 'Error al procesar la solicitud',
+            data: { message: 'Error al actualizar' },
             status: 500,
             ok: false,
         }

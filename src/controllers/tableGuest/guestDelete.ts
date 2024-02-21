@@ -24,13 +24,13 @@ export const deleteGuest = async (c: any): Promise<Answer> => {
         }
 
         return {
-            data: 'El cliente no existe',
+            data: { message: 'No se ha eliminado correctamente' },
             status: 400,
             ok: false,
         }
     } catch (error) {
         return {
-            data: 'Error al procesar la solicitud',
+            data: { message: 'Error al eliminar' },
             status: 422,
             ok: false,
         }
