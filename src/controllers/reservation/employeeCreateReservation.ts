@@ -4,11 +4,41 @@ import { roomSchema } from '../../db/schemas/room'
 import { Room } from '../../models/room'
 import { Reservation } from '../../models/reservation'
 import { reservationSchema } from '../../db/schemas/reservation'
+import { oneMoreDay, parseDateWithMidnight } from '../../utils/dates'
+import { guestSchema } from '../../db/schemas/guest'
 
 export const employeeCreateReservation = async (c: any): Promise<Answer> => {
-    const reservationDate = await c.req.json()
+    const reservationData = await c.req.json()
 
-    const roomNumber = reservationDate.roomNumber
+    const userModel = mongoose.model('guests', guestSchema)
+    const roomNumber = reservationData.roomNumber
+    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
+    const ReservationModel = mongoose.model<Reservation>(
+        'reservation',
+        reservationSchema
+    )
+    const user = await userModel.findOne({ email: reservationData.guestEmail })
+
+    if (!user) {
+        return {
+            data: 'Usuario no encontrado',
+            status: 404,
+            ok: false,
+        }
+    }
+    console.log(reservationData)
+
+    if (
+        (user.email !== reservationData.guestEmail,
+        user.surname !== reservationData.guestSurname,
+        user.name !== reservationData.guestName)
+    ) {
+        return {
+            data: 'Usuario no encontrado',
+            status: 400,
+            ok: false,
+        }
+    }
 
     if (isNaN(roomNumber)) {
         return {
@@ -18,13 +48,7 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
         }
     }
 
-    const RoomModel = mongoose.model<Room>('rooms', roomSchema)
-    const ReservationModel = mongoose.model<Reservation>(
-        'reservation',
-        reservationSchema
-    )
-
-    if (!reservationDate) {
+    if (!reservationData) {
         return {
             data: 'Hmmm missing or invalid data',
             status: 400,
@@ -32,12 +56,12 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
         }
     }
 
-    const reservationData = await c.req.json()
-    const reservationCheckIn = new Date(reservationData.checkIn)
-    const reservationCheckOut = new Date(reservationData.checkOut)
-
-    console.log(reservationData);
-    
+    const reservationCheckIn = parseDateWithMidnight(
+        oneMoreDay(reservationData.checkIn)
+    )
+    const reservationCheckOut = new Date(
+        parseDateWithMidnight(oneMoreDay(reservationData.checkOut))
+    )
 
     reservationData.reseved = true
 
@@ -63,51 +87,13 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
             ],
         })
 
-        const validateReservation = await ReservationModel.find({
-            roomNumber: roomNumber,
-            $or: [
-                {
-                    checkIn: {
-                        $lte: reservationCheckIn,
-                    },
-                    checkOut: {
-                        $gte: reservationCheckOut,
-                    },
-                },
-                {
-                    checkIn: {
-                        $gte: reservationCheckIn,
-                    },
-                    checkOut: {
-                        $lte: reservationCheckOut,
-                    },
-                },
-                {
-                    checkIn: {
-                        $lte: reservationCheckIn,
-                    },
-                    checkOut: {
-                        $gte: reservationCheckOut,
-                    },
-                },
-            ],
-        })
-
-        if (validateReservation.length > 0) {
-            return {
-                data: 'Reserva no disponible',
-                status: 409,
-                ok: false,
-            }
-        }
-
         if (!room) {
             return { data: 'Reserva no disponible', status: 409, ok: false }
         }
 
         const reserve = {
-            guestName: reservationData.name,
-            guestSurname: reservationData.surname,
+            guestName: reservationData.guestName,
+            guestSurname: reservationData.guestSurname,
             guestEmail: reservationData.guestEmail,
             roomNumber: reservationData.roomNumber,
             pricePerNight: room.pricePerNight,
@@ -131,7 +117,7 @@ export const employeeCreateReservation = async (c: any): Promise<Answer> => {
         )
 
         return {
-            data: room,
+            data: 'Reserva creada',
             status: 201,
             ok: true,
         }
