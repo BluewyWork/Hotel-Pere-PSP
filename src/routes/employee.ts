@@ -21,7 +21,7 @@ app.put('/', async (c) => {
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
 })
-app.delete('/', async (c) => {
+app.delete('/:email', async (c) => {
     const result = await adminDeleteEmployee(c)
 
     return c.json({ data: result.data, ok: result.ok }, result.status)
