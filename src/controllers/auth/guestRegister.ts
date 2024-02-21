@@ -20,6 +20,18 @@ export const guestRegister = async (c: any): Promise<Answer> => {
         }
     }
 
+    const sameEmail = await GuestModel.findOne({
+        email: validateGuest.data.email,
+    })
+
+    if (sameEmail) {
+        return {
+            data: 'El correo ya está en uso',
+            status: 422,
+            ok: false,
+        }
+    }
+
     try {
         validateGuest.data.password = await hashPassword(
             validateGuest.data.password

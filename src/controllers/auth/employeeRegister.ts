@@ -20,6 +20,18 @@ export const employeeRegister = async (c: any): Promise<Answer> => {
             ok: false,
         }
     }
+    
+    const sameEmail = await EmployeeModel.findOne({
+        email: validateEmployee.data.email,
+    })
+
+    if(sameEmail) {
+        return {
+            data: 'El correo ya está en uso',
+            status: 422,
+            ok: false,
+        }
+    }
 
     try {
         validateEmployee.data.password = await hashPassword(
