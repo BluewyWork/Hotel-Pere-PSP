@@ -4,7 +4,7 @@ export interface Employee {
     // _id: Types.ObjectId
     name: string
     surname: string
-    admin: boolean
+    admin?: boolean
     email: string
-    password: string
+    password?: string
 }

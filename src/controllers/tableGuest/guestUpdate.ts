@@ -4,7 +4,7 @@ import { Answer } from '../../models/answer'
 import { Guest } from '../../models/guest'
 
 export const updateGuest = async (c: any): Promise<Answer> => {
-    const GuestModel = mongoose.model<Guest>('guest', guestSchema)
+    const GuestModel = mongoose.model<Guest>('guests', guestSchema)
 
     const guest = (await c.req.json()) as Guest
 
