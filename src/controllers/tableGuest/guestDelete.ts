@@ -11,9 +11,13 @@ export const deleteGuest = async (c: any): Promise<Answer> => {
     try {
         const result = await GuestModel.deleteOne({ _id: payload._id })
 
+        console.log(result.deletedCount)
+
         if (result.deletedCount === 1) {
+            console.log('Se ha eliminado correctamente')
+
             return {
-                data: 'Se ha eliminado correctamente',
+                data: { message: 'Se ha eliminado correctamente' },
                 status: 200,
                 ok: true,
             }
