@@ -2,17 +2,12 @@ import mongoose from 'mongoose'
 import { reservationSchema } from '../../db/schemas/reservation'
 import { Answer } from '../../models/answer'
 import { Reservation } from '../../models/reservation'
-
-interface Filter {
-    guestEmail?: any
-    checkIn?: any
-    checkOut?: any
-}
+import { oneMoreDay, parseDateWithMidnight } from '../../utils/dates'
 
 export const employeeShowFilteredReservations = async (
     c: any
 ): Promise<Answer> => {
-    const filter: Filter = {}
+    const filter: any = {}
 
     const guestEmail = c.req.query('email')
     const checkIn = c.req.query('checkIn')
@@ -22,31 +17,23 @@ export const employeeShowFilteredReservations = async (
         filter.guestEmail = { $eq: guestEmail }
     }
 
-    if (checkIn) {
-        filter.checkIn = { $gte: checkIn }
+    if (checkIn && checkOut) {
+        const checkInParse = new Date(
+            parseDateWithMidnight(oneMoreDay(checkIn))
+        )
+        const checkOutParse = new Date(
+            parseDateWithMidnight(oneMoreDay(checkOut))
+        )
+        filter.checkIn = { $lte: checkInParse }
+        filter.checkOut = { $gte: checkOutParse }
     }
-
-    if (checkOut) {
-        filter.checkOut = { $lte: checkOut }
-    }
-
-    console.log(filter)
-
-    const ReservationModel = mongoose.model<Reservation>(
-        'reservation',
-        reservationSchema
-    )
 
     try {
+        const ReservationModel = mongoose.model<Reservation>(
+            'reservation',
+            reservationSchema
+        )
         const reservations = await ReservationModel.find(filter)
-
-        if (reservations.length <= 0) {
-            return {
-                data: 'La reserva no existe',
-                status: 404,
-                ok: false,
-            }
-        }
 
         return {
             data: reservations,
