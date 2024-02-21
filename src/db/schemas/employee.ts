@@ -6,5 +6,6 @@ export const employeeSchema = new Schema({
     surname: String,
     admin: Boolean,
     email: String,
+    image: String,
     password: String,
 })

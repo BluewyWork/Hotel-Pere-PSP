@@ -6,5 +6,6 @@ export interface Employee {
     surname: string
     admin?: boolean
     email: string
+    image?: string
     password?: string
 }

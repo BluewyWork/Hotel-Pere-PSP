@@ -5,9 +5,20 @@ import { employeeSchema } from '../../db/schemas/employee'
 import { ValidationEmployee } from '../../validators/employee'
 import { invalidContent } from '../../utils/validators'
 import { hashPassword } from '../../utils/auth'
+import { Context } from 'hono'
 
-export const employeeRegister = async (c: any): Promise<Answer> => {
+export const employeeRegister = async (c: Context): Promise<Answer> => {
     const EmployeeModel = mongoose.model<Employee>('Employee', employeeSchema)
+
+    const payload = c.get('jwtPayload')
+
+    if (!payload || !payload.admin) {
+        return {
+            data: 'No autorizado',
+            status: 401,
+            ok: false,
+        }
+    }
 
     const employee = (await c.req.json()) as Employee
 
@@ -20,12 +31,12 @@ export const employeeRegister = async (c: any): Promise<Answer> => {
             ok: false,
         }
     }
-    
+
     const sameEmail = await EmployeeModel.findOne({
         email: validateEmployee.data.email,
     })
 
-    if(sameEmail) {
+    if (sameEmail) {
         return {
             data: 'El correo ya está en uso',
             status: 422,

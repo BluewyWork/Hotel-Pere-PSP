@@ -5,5 +5,6 @@ export const ValidationEmployee = z.object({
     surname: z.string(),
     admin: z.boolean(),
     email: z.string(),
+    image: z.string().optional(),
     password: z.string(),
 })
