@@ -1,10 +1,1 @@
-Intermodular Project Evaluation
-
-```
-pnpm install
-pnpm run dev
-```
-
-```
-open http://localhost:8000
-```
+This is a student project created as part of cross platform application development course.
